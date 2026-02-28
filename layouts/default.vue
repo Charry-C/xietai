@@ -44,13 +44,59 @@
         </nav>
 
         <!-- Mobile Menu Button -->
-        <button class="md:hidden p-2 text-gray-600 hover:text-blue-600 focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <button
+          @click="mobileOpen = !mobileOpen"
+          :aria-expanded="mobileOpen"
+          :aria-label="mobileOpen ? 'Close menu' : 'Open menu'"
+          aria-controls="mobile-menu"
+          class="md:hidden p-2 text-gray-600 hover:text-blue-600 focus:outline-none"
+        >
+          <svg
+            v-if="!mobileOpen"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
+      <transition name="mobile-menu-slide">
+        <div
+          v-if="mobileOpen"
+          id="mobile-menu"
+          class="md:hidden fixed left-0 right-0 top-16 z-50 border-t border-gray-200 bg-white"
+        >
+          <nav class="container mx-auto px-4 py-3 space-y-1 font-medium">
+            <NuxtLink to="/" class="block py-2 hover:text-blue-600 transition">Home</NuxtLink>
+            <NuxtLink to="/products" class="block py-2 hover:text-blue-600 transition">Products</NuxtLink>
+            <NuxtLink to="/services" class="block py-2 hover:text-blue-600 transition">Services</NuxtLink>
+            <NuxtLink to="/about" class="block py-2 hover:text-blue-600 transition">About Us</NuxtLink>
+            <NuxtLink to="/contact" class="block py-2 hover:text-blue-600 transition">Contact</NuxtLink>
+          </nav>
+        </div>
+      </transition>
     </header>
+
+    <transition name="mobile-menu-fade">
+      <div
+        v-if="mobileOpen"
+        class="md:hidden fixed inset-0 bg-black/20 z-40"
+        @click="mobileOpen = false"
+      />
+    </transition>
 
     <!-- Main Content -->
     <main class="flex-grow">
@@ -122,3 +168,32 @@
     </footer>
   </div>
 </template>
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+const mobileOpen = ref(false)
+const route = useRoute()
+// 监听路由变化，关闭移动端菜单
+watch(() => route.fullPath, () => {
+  mobileOpen.value = false
+})
+</script>
+<style scoped>
+.mobile-menu-slide-enter-active,
+.mobile-menu-slide-leave-active {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.mobile-menu-slide-enter-from,
+.mobile-menu-slide-leave-to {
+  transform: translateY(-8px);
+  opacity: 0;
+}
+
+.mobile-menu-fade-enter-active,
+.mobile-menu-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.mobile-menu-fade-enter-from,
+.mobile-menu-fade-leave-to {
+  opacity: 0;
+}
+</style>

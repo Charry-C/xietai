@@ -193,9 +193,16 @@
 
 <script setup lang="ts">
 // You can use the API here
-import { getProducts } from '~/api/product'
+import { getProducts } from '@/api/product'
 
-const { data: products } = await getProducts()
+const { data: products } = await getProducts({
+  query: {
+    populate: 'url',
+  },
+  transform: (response: any) => {
+    return response.data
+  }
+})
 
 console.log(products.value);
 
