@@ -36,11 +36,35 @@
 
         <!-- Navigation -->
         <nav class="hidden md:flex space-x-8 font-medium">
-          <NuxtLink to="/" class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600">Home</NuxtLink>
-          <NuxtLink to="/products" class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600">Products</NuxtLink>
-          <NuxtLink to="/services" class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600">Services</NuxtLink>
-          <NuxtLink to="/about" class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600">About Us</NuxtLink>
-          <NuxtLink to="/contact" class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600">Contact</NuxtLink>
+          <NuxtLink
+            to="/"
+            class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600"
+            exact-active-class="text-blue-600 border-blue-600"
+          >Home</NuxtLink>
+          <NuxtLink
+            to="/products"
+            class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600"
+            active-class="text-blue-600 border-blue-600"
+            exact-active-class="text-blue-600 border-blue-600"
+          >Products</NuxtLink>
+          <NuxtLink
+            to="/services"
+            class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600"
+            active-class="text-blue-600 border-blue-600"
+            exact-active-class="text-blue-600 border-blue-600"
+          >Services</NuxtLink>
+          <NuxtLink
+            to="/about"
+            class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600"
+            active-class="text-blue-600 border-blue-600"
+            exact-active-class="text-blue-600 border-blue-600"
+          >About Us</NuxtLink>
+          <NuxtLink
+            to="/contact"
+            class="hover:text-blue-600 transition py-2 border-b-2 border-transparent hover:border-blue-600"
+            active-class="text-blue-600 border-blue-600"
+            exact-active-class="text-blue-600 border-blue-600"
+          >Contact</NuxtLink>
         </nav>
 
         <!-- Mobile Menu Button -->
@@ -80,11 +104,11 @@
           class="md:hidden fixed left-0 right-0 top-16 z-50 border-t border-gray-200 bg-white"
         >
           <nav class="container mx-auto px-4 py-3 space-y-1 font-medium">
-            <NuxtLink to="/" class="block py-2 hover:text-blue-600 transition">Home</NuxtLink>
-            <NuxtLink to="/products" class="block py-2 hover:text-blue-600 transition">Products</NuxtLink>
-            <NuxtLink to="/services" class="block py-2 hover:text-blue-600 transition">Services</NuxtLink>
-            <NuxtLink to="/about" class="block py-2 hover:text-blue-600 transition">About Us</NuxtLink>
-            <NuxtLink to="/contact" class="block py-2 hover:text-blue-600 transition">Contact</NuxtLink>
+            <NuxtLink to="/" class="block py-2 hover:text-blue-600 transition" exact-active-class="text-blue-600">Home</NuxtLink>
+            <NuxtLink to="/products" class="block py-2 hover:text-blue-600 transition" active-class="text-blue-600" exact-active-class="text-blue-600">Products</NuxtLink>
+            <NuxtLink to="/services" class="block py-2 hover:text-blue-600 transition" active-class="text-blue-600" exact-active-class="text-blue-600">Services</NuxtLink>
+            <NuxtLink to="/about" class="block py-2 hover:text-blue-600 transition" active-class="text-blue-600" exact-active-class="text-blue-600">About Us</NuxtLink>
+            <NuxtLink to="/contact" class="block py-2 hover:text-blue-600 transition" active-class="text-blue-600" exact-active-class="text-blue-600">Contact</NuxtLink>
           </nav>
         </div>
       </transition>

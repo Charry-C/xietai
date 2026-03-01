@@ -1,60 +1,61 @@
 import type { UseFetchOptions } from 'nuxt/app'
 
-export const useStrapiFetch = <T>(url: string, options: UseFetchOptions<T> = {}) => {
-  const config = useRuntimeConfig()
-  console.log(config.public.apiToken);
-  
-  const defaults: UseFetchOptions<T> = {
-    baseURL: (config.public.apiBase as string) || '',
-    headers: {
-      Authorization: `Bearer ${config.public.apiToken as string}`,
-    }
-  }
-
-  const mergedHeaders = {
-    ...(defaults.headers as any),
-    ...(options.headers as any)
-  }
-
-  const params = {
-    ...defaults,
-    ...options,
-    headers: mergedHeaders
-  }
-
-  return useFetch(url, params)
-}
-
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete'
 type AnyFetchOptions<T> = UseFetchOptions<T> & { params?: Record<string, any> }
+export type StrapiFetchOptions<T> = AnyFetchOptions<T>
 
 const normalizeOptions = <T>(options: AnyFetchOptions<T> = {}) => {
-  const { params, query, headers, ...rest } = options
-  const q = query ?? params
-  return { ...rest, query: q, headers }
+  const { params, query, ...rest } = options
+  return {
+    ...rest,
+    query: query ?? params
+  }
+}
+
+export const useStrapiFetch = <T>(
+  url: string,
+  method: HttpMethod,
+  options: AnyFetchOptions<T> = {},
+  body?: any
+) => {
+  const config = useRuntimeConfig()
+
+  const normalized = normalizeOptions(options)
+
+  const opts = {
+    baseURL: config.public.apiBase || '',
+    method: method as any,
+    ...normalized,
+    body,
+    headers: {
+      Authorization: `Bearer ${config.public.apiToken}`,
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...normalized.headers
+    }
+  } as any
+  return useFetch<T>(url, opts)
 }
 
 export const strapiFetch = {
-  get<T>(url: string, options: AnyFetchOptions<T> = {}) {
-    return useStrapiFetch<T>(url, { ...normalizeOptions(options), method: 'GET' })
+  get<T>(url: string, options?: AnyFetchOptions<T>) {
+    return useStrapiFetch<T>(url, 'get', options)
   },
-  post<T>(url: string, body?: any, options: AnyFetchOptions<T> = {}) {
-    const hdr = { 'Content-Type': 'application/json', ...(options.headers as any) }
-    return useStrapiFetch<T>(url, { ...normalizeOptions(options), method: 'POST', body, headers: hdr })
+
+  post<T>(url: string, body?: any, options?: AnyFetchOptions<T>) {
+    return useStrapiFetch<T>(url, 'post', options, body)
   },
-  put<T>(url: string, body?: any, options: AnyFetchOptions<T> = {}) {
-    const hdr = { 'Content-Type': 'application/json', ...(options.headers as any) }
-    return useStrapiFetch<T>(url, { ...normalizeOptions(options), method: 'PUT', body, headers: hdr })
+
+  put<T>(url: string, body?: any, options?: AnyFetchOptions<T>) {
+    return useStrapiFetch<T>(url, 'put', options, body)
   },
-  patch<T>(url: string, body?: any, options: AnyFetchOptions<T> = {}) {
-    const hdr = { 'Content-Type': 'application/json', ...(options.headers as any) }
-    return useStrapiFetch<T>(url, { ...normalizeOptions(options), method: 'PATCH', body, headers: hdr })
+
+  patch<T>(url: string, body?: any, options?: AnyFetchOptions<T>) {
+    return useStrapiFetch<T>(url, 'patch', options, body)
   },
-  delete<T>(url: string, body?: any, options: AnyFetchOptions<T> = {}) {
-    return useStrapiFetch<T>(url, { ...normalizeOptions(options), method: 'DELETE', body })
+
+  delete<T>(url: string, body?: any, options?: AnyFetchOptions<T>) {
+    return useStrapiFetch<T>(url, 'delete', options, body)
   }
 }
 
 export const useStrapi = () => strapiFetch
-
-export const options = {}

@@ -8,5 +8,15 @@ export default defineNuxtConfig({
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
       apiToken: process.env.NUXT_PUBLIC_API_TOKEN
     }
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        less: {
+          // additionalData: '@import "@/assets/styles/variables.less";',
+          javascriptEnabled: true
+        }
+      }
+    }
   }
 })
