@@ -1,0 +1,25 @@
+# node_modules 本地依赖
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+
+# Nuxt build 输出（如果你在镜像里 build）
+.nuxt
+dist
+
+# git
+.git
+.gitignore
+
+# 本地 IDE 文件
+.vscode
+.idea
+.DS_Store
+
+# env 本地开发文件（生产使用服务器 .env）
+.env
+.env.*.local
+
+# 临时文件
+*.log
