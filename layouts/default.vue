@@ -66,16 +66,6 @@
             {{ link.name }}
           </NuxtLink>
         </nav>
-        
-        <button 
-          @click="mobileOpen = false"
-          class="absolute top-6 right-6 text-white/50 hover:text-white"
-        >
-          <span class="sr-only">Close</span>
-          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
       </div>
     </transition>
 
@@ -106,10 +96,8 @@
             <ul class="space-y-4 text-white/70">
               <li><NuxtLink to="/" class="hover:text-brand-gold transition-colors">Home</NuxtLink></li>
               <li><NuxtLink to="/products" class="hover:text-brand-gold transition-colors">Products</NuxtLink></li>
+              <li><NuxtLink to="/services" class="hover:text-brand-gold transition-colors">Services</NuxtLink></li>
               <li><NuxtLink to="/about" class="hover:text-brand-gold transition-colors">About Us</NuxtLink></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors">Application Video</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors">Technology</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors">News</a></li>
               <li><NuxtLink to="/contact" class="hover:text-brand-gold transition-colors">Contact Us</NuxtLink></li>
             </ul>
           </div>
