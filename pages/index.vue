@@ -66,8 +66,11 @@
                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
             </div>
             <!-- Decorative Element -->
-            <div class="absolute -bottom-6 -right-6 w-full h-full border-2 border-brand-gold/30 z-0 hidden md:block"></div>
+            <div
+              class="absolute -bottom-6 -right-6 w-full h-full border-2 border-brand-gold/30 z-0 hidden md:block"
+            ></div>
           </div>
+
 
           <div class="w-full md:w-1/2">
             <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-navy mb-6 md:mb-8 text-center md:text-left">
@@ -85,6 +88,7 @@
               Our state-of-the-art facilities in Hangzhou allow us to control every step of production,
               ensuring consistency, quality, and timely global delivery.
             </p>
+
 
             <div class="grid grid-cols-2 gap-8">
               <div>
@@ -174,10 +178,24 @@
             <span class="text-brand-gold font-bold tracking-widest uppercase text-xs sm:text-sm mb-2 md:mb-3 block">Our Collection</span>
             <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold">Featured Fabrics</h2>
           </div>
-          <NuxtLink to="/products" class="hidden md:inline-flex items-center gap-2 text-brand-gold hover:text-white transition-colors font-medium">
+          <NuxtLink
+            to="/products"
+            class="hidden md:inline-flex items-center gap-2 text-brand-gold hover:text-white transition-colors font-medium"
+          >
             View All Products
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
             </svg>
           </NuxtLink>
         </div>
