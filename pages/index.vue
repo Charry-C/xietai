@@ -36,16 +36,13 @@
         <span
           class="inline-block py-1 px-3 border border-brand-gold/50 rounded-full text-brand-gold text-xs font-bold tracking-widest uppercase mb-4 md:mb-6 animate-fade-in-up"
         >
-          {{ homeData?.bannerArea?.subTitle || 'Premium Manufacturing' }}
+          Xie Tai - Premium Customization
         </span>
         <h1
           class="text-3xl sm:text-5xl md:text-7xl font-serif font-bold mb-6 md:mb-8 leading-tight animate-fade-in-up animation-delay-100 px-2"
         >
           <template v-if="homeData?.bannerArea?.title">
             {{ homeData.bannerArea.title }}
-          </template>
-          <template v-else>
-            The Art of <span class="italic text-brand-gold">Fine Textiles</span>
           </template>
         </h1>
         <p
@@ -73,7 +70,7 @@
     </section>
 
     <!-- Products Section -->
-    <section class="py-16 md:py-24 bg-brand-navy text-white relative z-10">
+    <section class="py-16 md:py-24 bg-brand-cream text-white relative z-10">
       <div class="container mx-auto px-4 sm:px-6">
         <div
           class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16"
@@ -81,9 +78,11 @@
           <div>
             <span
               class="text-brand-gold font-bold tracking-widest uppercase text-xs sm:text-sm mb-2 md:mb-3 block"
-              >Our Collection</span
+              >{{ homeData?.productArea?.subTitle || 'Our Collection' }}</span
             >
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold">Featured Fabrics</h2>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-navy">
+              {{ homeData?.productArea?.title || 'Featured Fabrics' }}
+            </h2>
           </div>
           <NuxtLink
             to="/products"
@@ -108,20 +107,18 @@
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <!-- Dynamic Products Loop (if any) -->
           <div
-            v-for="product in products?.slice(0, 4)"
+            v-for="product in productsList"
             :key="product.id"
             class="group relative aspect-[3/4] bg-gray-800 overflow-hidden cursor-pointer"
           >
             <img
-              :src="
-                product.url ||
-                'https://images.unsplash.com/photo-1596205847326-17b5f902403b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-              "
+              v-if="product.image"
+              :src="product.image"
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
-              :alt="product.name"
+              :alt="product.title"
             />
+            <div v-else class="w-full h-full bg-gray-700"></div>
             <div
               class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90"
             ></div>
@@ -131,11 +128,11 @@
               <span class="text-brand-gold text-xs font-bold uppercase tracking-wider mb-2 block"
                 >Collection</span
               >
-              <h3 class="text-xl sm:text-2xl font-serif font-bold mb-2">{{ product.name }}</h3>
+              <h3 class="text-xl sm:text-2xl font-serif font-bold mb-2">{{ product.title }}</h3>
               <p
                 class="text-white/60 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100"
               >
-                Discover our premium quality {{ product.name }}.
+                {{ product.description }}
               </p>
             </div>
           </div>
@@ -171,13 +168,13 @@
       </div>
 
       <div class="container mx-auto px-4 sm:px-6 relative z-20">
-        <div class="text-center mb-12 md:mb-20">
-          <span class="text-brand-gold font-bold tracking-widest uppercase text-sm mb-3 block">
-            {{ homeData?.servicesArea?.subTitle || 'Our Expertise' }}
-          </span>
+        <div class="text-center mb-6">
           <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-navy">
             {{ homeData?.servicesArea?.title || 'Comprehensive Services' }}
           </h2>
+          <span class="text-brand-gold font-bold tracking-widest uppercase text-sm mt-5 block">
+            {{ homeData?.servicesArea?.subTitle || 'Our Expertise' }}
+          </span>
         </div>
 
         <div class="mb-10 md:mb-14 grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8 items-stretch">
@@ -202,16 +199,16 @@
             class="lg:col-span-2 bg-white/90 backdrop-blur-sm border border-brand-gold/20 p-6 sm:p-8 md:p-10 flex flex-col justify-center"
           >
             <p class="text-sm uppercase tracking-[0.24em] text-brand-gold font-semibold mb-4">
-              Service Vision
+              {{ titleCard?.subTitle || 'Service Vision' }}
             </p>
             <h3
               class="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-brand-navy mb-4 md:mb-5"
             >
-              {{ homeData?.servicesArea?.title || 'Comprehensive Services' }}
+              {{ titleCard?.title || homeData?.servicesArea?.title || 'Comprehensive Services' }}
             </h3>
             <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
               {{
-                homeData?.servicesArea?.subTitle ||
+                titleCard?.description ||
                 'Integrated manufacturing, process control and worldwide delivery from one textile partner.'
               }}
             </p>
@@ -227,7 +224,14 @@
             <div
               class="w-12 h-12 md:w-14 md:h-14 bg-brand-gold/10 text-brand-gold flex items-center justify-center rounded-full mb-6 md:mb-8 group-hover:bg-white/10 group-hover:text-white transition-colors"
             >
+              <img
+                v-if="service.iconUrl"
+                :src="service.iconUrl"
+                class="h-5 w-5 md:h-6 md:w-6 object-contain"
+                alt=""
+              />
               <svg
+                v-else
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 md:h-6 md:w-6"
                 fill="none"
@@ -318,7 +322,14 @@
                   <div
                     class="absolute inset-1.5 border-[1.5px] border-white/60 border-dashed rounded-full"
                   ></div>
+                  <img
+                    v-if="advantage.iconUrl"
+                    :src="advantage.iconUrl"
+                    class="relative z-10 w-7 h-7 object-contain"
+                    alt=""
+                  />
                   <svg
+                    v-else
                     width="28"
                     height="28"
                     viewBox="0 0 24 24"
@@ -516,14 +527,30 @@
             <p class="text-lg text-gray-600 mb-6 leading-relaxed">{{ aboutLeadText }}</p>
 
             <div class="grid grid-cols-2 gap-8">
-              <div>
-                <span class="block text-4xl font-serif font-bold text-brand-navy mb-2">25+</span>
-                <span class="text-sm text-gray-500 uppercase tracking-wider">Years Experience</span>
-              </div>
-              <div>
-                <span class="block text-4xl font-serif font-bold text-brand-navy mb-2">10M+</span>
-                <span class="text-sm text-gray-500 uppercase tracking-wider">Meters Annually</span>
-              </div>
+              <template v-if="aboutArea?.numArea?.length">
+                <div v-for="item in aboutArea.numArea" :key="item.id">
+                  <span class="block text-4xl font-serif font-bold text-brand-navy mb-2">{{
+                    item.mainNum
+                  }}</span>
+                  <span class="text-sm text-gray-500 uppercase tracking-wider">{{
+                    item.description
+                  }}</span>
+                </div>
+              </template>
+              <template v-else>
+                <div>
+                  <span class="block text-4xl font-serif font-bold text-brand-navy mb-2">25+</span>
+                  <span class="text-sm text-gray-500 uppercase tracking-wider"
+                    >Years Experience</span
+                  >
+                </div>
+                <div>
+                  <span class="block text-4xl font-serif font-bold text-brand-navy mb-2">10M+</span>
+                  <span class="text-sm text-gray-500 uppercase tracking-wider"
+                    >Meters Annually</span
+                  >
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -537,17 +564,16 @@
         <h2
           class="text-4xl sm:text-5xl md:text-7xl font-serif font-bold text-brand-navy mb-6 md:mb-8"
         >
-          Ready to create?
+          Contact Us
         </h2>
         <p class="text-base sm:text-xl text-gray-500 mb-8 md:mb-10 max-w-2xl mx-auto px-2">
-          Let's discuss your next project. We offer custom manufacturing solutions tailored to your
-          brand's needs.
+          We offer manufacturing solutions tailored to your brand's specific needs.
         </p>
         <NuxtLink
           to="/contact"
           class="inline-block bg-brand-navy text-white px-8 sm:px-12 py-4 sm:py-5 font-bold tracking-wide hover:bg-brand-gold transition-colors duration-300 shadow-2xl text-sm sm:text-base"
         >
-          Get a Quote
+          Inquiry & Quotation
         </NuxtLink>
       </div>
     </section>
@@ -555,10 +581,8 @@
 </template>
 
 <script setup lang="ts">
-import { getProducts } from '@/api/product'
 import { getHomeData, type HomeData, type MediaFile } from '@/api/home'
-import { getStrapiImage } from '@/utils/index'
-import { computed, ref, onMounted, onUnmounted, onBeforeUnmount } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 
 const config = useRuntimeConfig()
 
@@ -584,7 +608,7 @@ const updateItemsPerView = () => {
   }
 
   // Ensure currentSlide doesn't exceed new max index when resizing
-  const maxSlideIndex = Math.max(0, coreAdvantagesList.length - itemsPerView.value)
+  const maxSlideIndex = Math.max(0, coreAdvantagesList.value.length - itemsPerView.value)
   if (currentSlide.value > maxSlideIndex) {
     currentSlide.value = maxSlideIndex
   }
@@ -613,9 +637,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (observer) {
-    observer.disconnect()
-  }
+  observer?.disconnect()
   if (typeof window !== 'undefined') {
     window.removeEventListener('resize', updateItemsPerView)
   }
@@ -623,7 +645,7 @@ onUnmounted(() => {
 
 // Computed max slides to prevent empty spaces
 const maxSlides = computed(() => {
-  return Math.max(0, coreAdvantagesList.length - itemsPerView.value)
+  return Math.max(0, coreAdvantagesList.value.length - itemsPerView.value)
 })
 
 const canSlideNext = computed(() => currentSlide.value < maxSlides.value)
@@ -665,26 +687,36 @@ const handleTouchEnd = () => {
   }
 }
 
-// Helper to get full URL for media - use API returned URL directly if it's already a full URL
+// Media helpers
+const baseUrl = config.public.base || ''
 const getFullUrl = (url: string) => {
   if (!url) return ''
-  // If it's already a full URL, use it directly
-  if (url.startsWith('http')) return url
-  // Otherwise, prepend the base URL from config
-  const baseUrl = config.public.base || ''
-  return `${baseUrl}${url}`
+  return url.startsWith('http') ? url : `${baseUrl}${url}`
 }
 
-// Helper to check if URL is a video
-const isVideo = (url: string) => {
-  if (!url) return false
-  const videoExts = ['.mp4', '.webm', '.ogg', '.mov']
-  return videoExts.some((ext) => url.toLowerCase().includes(ext))
-}
+const VIDEO_EXTS = ['.mp4', '.webm', '.ogg', '.mov']
+const isVideo = (url: string) => !!url && VIDEO_EXTS.some((ext) => url.toLowerCase().includes(ext))
 
-const normalizeMediaList = (media: MediaFile[] | MediaFile | null | undefined) => {
+const normalizeMediaList = (media: MediaFile[] | MediaFile | null | undefined): MediaFile[] => {
   if (!media) return []
   return Array.isArray(media) ? media : [media]
+}
+
+// Returns background URL, falling back to first companyImg
+const getAreaBackgroundUrl = (area: any): string | null => {
+  if (area?.background?.url) return getFullUrl(area.background.url)
+  const first = normalizeMediaList(area?.companyImgs)[0]
+  return first?.url ? getFullUrl(first.url) : null
+}
+
+// Returns first MediaFile of given type from area
+const getAreaMediaAsset = (area: any, type: 'video' | 'image'): MediaFile | null => {
+  const match = type === 'video' ? isVideo : (url: string) => !isVideo(url)
+  if (type === 'image' && area?.background?.url && match(area.background.url))
+    return area.background
+  return (
+    normalizeMediaList(area?.companyImgs).find((m: MediaFile) => !!m?.url && match(m.url)) || null
+  )
 }
 
 // Fetch home page data
@@ -696,99 +728,68 @@ const homeData = computed<HomeData | null>(() => {
   return homeResponse.value?.data || null
 })
 
-const bannerDescription = computed(() => {
-  return (
+const bannerDescription = computed(
+  () =>
     homeData.value?.bannerArea?.subTitle ||
-    'From raw fiber to finished fabric, Xietai delivers excellence in every thread. Your trusted global partner for innovative textile solutions.'
-  )
-})
+    'From raw fiber to finished fabric, Xietai delivers excellence in every thread. Your trusted global partner for innovative textile solutions.',
+)
 
 const heroBackgroundUrl = computed(() => {
-  const bannerArea = homeData.value?.bannerArea
-  const bg = bannerArea?.background
-  if (bg?.url) return getFullUrl(bg.url)
-  const bannerMedia = normalizeMediaList(bannerArea?.companyImgs)
-  if (bannerMedia[0]?.url) return getFullUrl(bannerMedia[0].url)
-  return null
+  const bg = homeData.value?.bannerArea?.background
+  return bg?.url ? getFullUrl(bg.url) : null
 })
+
+const aboutArea = computed(() => homeData.value?.aboutArea)
 
 const aboutPrimaryMedia = computed<MediaFile | null>(() => {
-  const aboutArea = homeData.value?.aboutArea
-  if (aboutArea?.background?.url) return aboutArea.background
-  const aboutMedia = normalizeMediaList(aboutArea?.companyImgs)
-  return aboutMedia[0] || null
+  if (aboutArea.value?.background?.url) return aboutArea.value.background
+  return normalizeMediaList(aboutArea.value?.companyImgs)[0] || null
 })
 
-const aboutLeadText = computed(() => {
-  return (
-    homeData.value?.aboutArea?.subTitle ||
-    'Established in 1998, Xietai has grown from a local weaving mill to a global textile powerhouse focused on high-performance fabrics.'
-  )
-})
+const aboutLeadText = computed(
+  () =>
+    aboutArea.value?.subTitle ||
+    'Established in 1998, Xietai has grown from a local weaving mill to a global textile powerhouse focused on high-performance fabrics.',
+)
 
-const aboutBackgroundUrl = computed(() => {
-  const aboutArea = homeData.value?.aboutArea
-  const bg = aboutArea?.background
-  if (bg?.url) return getFullUrl(bg.url)
-  const aboutMedia = normalizeMediaList(aboutArea?.companyImgs)
-  if (aboutMedia[0]?.url) return getFullUrl(aboutMedia[0].url)
-  return null
-})
+const aboutBackgroundUrl = computed(() => getAreaBackgroundUrl(aboutArea.value))
 
-const servicesBackgroundUrl = computed(() => {
-  const servicesArea = homeData.value?.servicesArea
-  const bg = servicesArea?.background
-  if (bg?.url) return getFullUrl(bg.url)
-  const serviceMedia = normalizeMediaList(servicesArea?.companyImgs)
-  if (serviceMedia[0]?.url) return getFullUrl(serviceMedia[0].url)
-  return null
-})
+const servicesArea = computed(() => homeData.value?.servicesArea)
 
-const serviceVideoAsset = computed<MediaFile | null>(() => {
-  const servicesArea = homeData.value?.servicesArea
-  const mediaList = normalizeMediaList(servicesArea?.companyImgs)
-  return mediaList.find((item) => !!item?.url && isVideo(item.url)) || null
-})
+const servicesBackgroundUrl = computed(() => getAreaBackgroundUrl(servicesArea.value))
 
-const serviceImageAsset = computed<MediaFile | null>(() => {
-  const servicesArea = homeData.value?.servicesArea
-  if (servicesArea?.background?.url && !isVideo(servicesArea.background.url)) {
-    return servicesArea.background
-  }
-  const mediaList = normalizeMediaList(servicesArea?.companyImgs)
-  return mediaList.find((item) => !!item?.url && !isVideo(item.url)) || null
-})
+const serviceVideoAsset = computed<MediaFile | null>(() =>
+  getAreaMediaAsset(servicesArea.value, 'video'),
+)
+const serviceImageAsset = computed<MediaFile | null>(() =>
+  getAreaMediaAsset(servicesArea.value, 'image'),
+)
 
-const serviceVideoUrl = computed(() => {
-  if (!serviceVideoAsset.value?.url) return null
-  return getFullUrl(serviceVideoAsset.value.url)
-})
+const serviceVideoUrl = computed(() =>
+  serviceVideoAsset.value?.url ? getFullUrl(serviceVideoAsset.value.url) : null,
+)
 
-const serviceVideoPoster = computed(() => {
-  if (serviceImageAsset.value?.url) return getFullUrl(serviceImageAsset.value.url)
-  if (
-    homeData.value?.servicesArea?.background?.url &&
-    !isVideo(homeData.value.servicesArea.background.url)
-  ) {
-    return getFullUrl(homeData.value.servicesArea.background.url)
-  }
-  return null
-})
+const serviceVideoPoster = computed(() =>
+  serviceImageAsset.value?.url ? getFullUrl(serviceImageAsset.value.url) : null,
+)
 
 const defaultServices = [
   {
+    iconUrl: null,
     icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z',
     title: 'Material Selection',
     description:
       'Sourcing the finest fibers globally. From organic cottons to high-tech synthetics, quality starts at the source.',
   },
   {
+    iconUrl: null,
     icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
     title: 'Precision Weaving',
     description:
       'Advanced looms meet traditional techniques. We create complex weaves with exacting standards for texture and durability.',
   },
   {
+    iconUrl: null,
     icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
     title: 'Global Logistics',
     description:
@@ -796,13 +797,27 @@ const defaultServices = [
   },
 ]
 
-const servicesList = computed(() => defaultServices)
+const servicesList = computed(() => {
+  const cards = servicesArea.value?.card
+  if (cards?.length) {
+    return cards.map((card) => ({
+      iconUrl: card.icon?.url ? getFullUrl(card.icon.url) : null,
+      icon: '',
+      title: card.title || '',
+      description: card.subTitle || '',
+    }))
+  }
+  return defaultServices
+})
+
+const titleCard = computed(() => servicesArea.value?.titleCard)
 
 // Core Advantages Data
-const coreAdvantagesList = [
+const defaultAdvantages = [
   {
     image:
       'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    iconUrl: null,
     iconType: 'box',
     title: 'Packaging',
     description: "Book a ship's hold for you, load containers, and transport them to the port",
@@ -810,6 +825,7 @@ const coreAdvantagesList = [
   {
     image:
       'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    iconUrl: null,
     iconType: 'calculator',
     title: 'Weaving',
     description: 'Spinning and weaving process',
@@ -817,6 +833,7 @@ const coreAdvantagesList = [
   {
     image:
       'https://images.unsplash.com/photo-1605280263929-1c42c62ef169?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    iconUrl: null,
     iconType: 'check',
     title: 'Select raw materials',
     description: 'We will use high-quality raw materials to craft your order',
@@ -824,6 +841,7 @@ const coreAdvantagesList = [
   {
     image:
       'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    iconUrl: null,
     iconType: 'customize',
     title: 'Customize',
     description:
@@ -831,19 +849,34 @@ const coreAdvantagesList = [
   },
 ]
 
-// Fetch products
-const { data: products } = await getProducts({
-  query: {
-    populate: '*',
-  },
-  transform: (response: any) => {
-    const list = response?.data || []
-    return list.map((item: any) => ({
-      ...item,
-      url: getStrapiImage(item.image, 'large'),
+const coreAdvantagesList = computed(() => {
+  const cards = homeData.value?.advantageArea
+  if (cards?.length) {
+    return cards.map((card) => ({
+      image: card.bannerImg?.url ? getFullUrl(card.bannerImg.url) : '',
+      iconUrl: card.icon?.url ? getFullUrl(card.icon.url) : null,
+      iconType: '',
+      title: card.title || '',
+      description: card.subTitle || '',
     }))
-  },
-  server: false,
+  }
+  return defaultAdvantages
+})
+
+const productArea = computed(() => homeData.value?.productArea)
+
+const productsList = computed(() => {
+  const cards = productArea.value?.card
+  if (cards?.length) {
+    return cards.map((card) => ({
+      id: card.id,
+      image: card.bannerImg?.url ? getFullUrl(card.bannerImg.url) : '',
+      iconUrl: card.icon?.url ? getFullUrl(card.icon.url) : null,
+      title: card.title || '',
+      description: card.subTitle || '',
+    }))
+  }
+  return []
 })
 </script>
 
