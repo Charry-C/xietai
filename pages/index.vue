@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="font-serif">
     <!-- Hero Section -->
     <section
       class="relative h-[70vh] md:h-[90vh] flex items-center justify-center overflow-hidden bg-brand-navy text-white"
@@ -39,7 +39,7 @@
           Xie Tai - Premium Customization
         </span>
         <h1
-          class="text-3xl sm:text-5xl md:text-7xl font-serif font-bold mb-6 md:mb-8 leading-tight animate-fade-in-up animation-delay-100 px-2"
+          class="text-3xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 leading-tight animate-fade-in-up animation-delay-100 px-2"
         >
           <template v-if="homeData?.bannerArea?.title">
             {{ homeData.bannerArea.title }}
@@ -80,7 +80,7 @@
               class="text-brand-gold font-bold tracking-widest uppercase text-xs sm:text-sm mb-2 md:mb-3 block"
               >{{ homeData?.productArea?.subTitle || 'Our Collection' }}</span
             >
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-navy">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy">
               {{ homeData?.productArea?.title || 'Featured Fabrics' }}
             </h2>
           </div>
@@ -128,7 +128,7 @@
               <span class="text-brand-gold text-xs font-bold uppercase tracking-wider mb-2 block"
                 >Collection</span
               >
-              <h3 class="text-xl sm:text-2xl font-serif font-bold mb-2">{{ product.title }}</h3>
+              <h3 class="text-xl sm:text-2xl font-bold mb-2">{{ product.title }}</h3>
               <p
                 class="text-white/60 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100"
               >
@@ -169,7 +169,7 @@
 
       <div class="container mx-auto px-4 sm:px-6 relative z-20">
         <div class="text-center mb-6">
-          <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-navy">
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy">
             {{ homeData?.servicesArea?.title || 'Comprehensive Services' }}
           </h2>
           <span class="text-brand-gold font-bold tracking-widest uppercase text-sm mt-5 block">
@@ -201,9 +201,7 @@
             <p class="text-sm uppercase tracking-[0.24em] text-brand-gold font-semibold mb-4">
               {{ titleCard?.subTitle || 'Service Vision' }}
             </p>
-            <h3
-              class="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-brand-navy mb-4 md:mb-5"
-            >
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-brand-navy mb-4 md:mb-5">
               {{ titleCard?.title || homeData?.servicesArea?.title || 'Comprehensive Services' }}
             </h3>
             <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
@@ -232,7 +230,7 @@
               />
             </div>
             <h3
-              class="text-xl sm:text-2xl font-serif font-bold text-brand-navy mb-3 md:mb-4 group-hover:text-white transition-colors"
+              class="text-xl sm:text-2xl font-bold text-brand-navy mb-3 md:mb-4 group-hover:text-white transition-colors"
             >
               {{ service.title }}
             </h3>
@@ -257,9 +255,7 @@
           class="text-center mb-16 md:mb-24 transition-all duration-1000 ease-out transform"
           :class="isAdvantagesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'"
         >
-          <h2
-            class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-navy uppercase"
-          >
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy uppercase">
             Our Advantages
           </h2>
         </div>
@@ -317,7 +313,11 @@
 
                 <!-- Content Body -->
                 <div class="pt-16 pb-12 px-6 flex-grow flex flex-col items-center text-center">
-                  <h3 class="text-[22px] text-[#333333] mb-4 font-medium">{{ advantage.title }}</h3>
+                  <h3
+                    class="text-xl sm:text-2xl font-bold text-brand-navy mb-3 md:mb-4 group-hover:text-white transition-colors"
+                  >
+                    {{ advantage.title }}
+                  </h3>
                   <p
                     class="text-[#666666] leading-[1.8] text-[15px]"
                     v-html="advantage.description"
@@ -421,7 +421,7 @@
 
           <div class="w-full md:w-1/2">
             <h2
-              class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-navy mb-6 md:mb-8 text-center md:text-left"
+              class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy mb-6 md:mb-8 text-center md:text-left"
             >
               <template v-if="homeData?.aboutArea?.title">
                 {{ homeData.aboutArea.title }}
@@ -437,7 +437,7 @@
             <div class="grid grid-cols-2 gap-8">
               <template v-if="aboutArea?.numArea?.length">
                 <div v-for="item in aboutArea.numArea" :key="item.id">
-                  <span class="block text-4xl font-serif font-bold text-brand-navy mb-2">{{
+                  <span class="block text-4xl font-bold text-brand-navy mb-2">{{
                     item.mainNum
                   }}</span>
                   <span class="text-sm text-gray-500 uppercase tracking-wider">{{
@@ -447,13 +447,13 @@
               </template>
               <template v-else>
                 <div>
-                  <span class="block text-4xl font-serif font-bold text-brand-navy mb-2">25+</span>
+                  <span class="block text-4xl font-bold text-brand-navy mb-2">25+</span>
                   <span class="text-sm text-gray-500 uppercase tracking-wider"
                     >Years Experience</span
                   >
                 </div>
                 <div>
-                  <span class="block text-4xl font-serif font-bold text-brand-navy mb-2">10M+</span>
+                  <span class="block text-4xl font-bold text-brand-navy mb-2">10M+</span>
                   <span class="text-sm text-gray-500 uppercase tracking-wider"
                     >Meters Annually</span
                   >
@@ -469,9 +469,7 @@
     <section class="py-20 md:py-32 relative flex items-center justify-center overflow-hidden">
       <div class="absolute inset-0 bg-brand-cream"></div>
       <div class="container mx-auto px-4 sm:px-6 relative z-10 text-center">
-        <h2
-          class="text-4xl sm:text-5xl md:text-7xl font-serif font-bold text-brand-navy mb-6 md:mb-8"
-        >
+        <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold text-brand-navy mb-6 md:mb-8">
           Contact Us
         </h2>
         <p class="text-base sm:text-xl text-gray-500 mb-8 md:mb-10 max-w-2xl mx-auto px-2">
