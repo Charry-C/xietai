@@ -222,29 +222,14 @@
             class="group p-6 sm:p-8 md:p-10 bg-brand-cream hover:bg-brand-navy transition-colors duration-500"
           >
             <div
-              class="w-12 h-12 md:w-14 md:h-14 bg-brand-gold/10 text-brand-gold flex items-center justify-center rounded-full mb-6 md:mb-8 group-hover:bg-white/10 group-hover:text-white transition-colors"
+              class="w-12 h-12 md:w-14 md:h-14 bg-brand-gold/10 text-brand-gold flex items-center justify-center rounded-full mb-6 md:mb-8 group-hover:bg-white/10 group-hover:text-white transition-colors overflow-hidden"
             >
               <img
                 v-if="service.iconUrl"
                 :src="service.iconUrl"
-                class="h-5 w-5 md:h-6 md:w-6 object-contain"
+                class="w-full h-full object-contain"
                 alt=""
               />
-              <svg
-                v-else
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 md:h-6 md:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  :d="service.icon"
-                />
-              </svg>
             </div>
             <h3
               class="text-xl sm:text-2xl font-serif font-bold text-brand-navy mb-3 md:mb-4 group-hover:text-white transition-colors"
@@ -273,7 +258,7 @@
           :class="isAdvantagesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'"
         >
           <h2
-            class="text-3xl sm:text-4xl md:text-[40px] font-bold text-[#C59B5F] uppercase tracking-wider"
+            class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-navy uppercase"
           >
             Our Advantages
           </h2>
@@ -316,7 +301,7 @@
 
                 <!-- Floating Icon Badge (Half embedded) - Moved outside image container so it sits on top -->
                 <div
-                  class="absolute top-64 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[84px] h-[84px] bg-[#C59B5F] rounded-full border-[6px] border-white flex items-center justify-center text-white z-20"
+                  class="absolute top-64 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[84px] h-[84px] bg-[#C59B5F] rounded-full border-[6px] border-white flex items-center justify-center text-white z-20 overflow-hidden group-hover:bg-[#C59B5F]/90 transition-colors duration-300"
                 >
                   <!-- Dashed inner border effect -->
                   <div
@@ -325,86 +310,9 @@
                   <img
                     v-if="advantage.iconUrl"
                     :src="advantage.iconUrl"
-                    class="relative z-10 w-7 h-7 object-contain"
+                    class="relative z-10 w-full h-full object-contain"
                     alt=""
                   />
-                  <svg
-                    v-else
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="relative z-10"
-                  >
-                    <path
-                      v-if="advantage.iconType === 'box'"
-                      d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
-                    ></path>
-                    <polyline
-                      v-if="advantage.iconType === 'box'"
-                      points="3.27 6.96 12 12.01 20.73 6.96"
-                    ></polyline>
-                    <line
-                      v-if="advantage.iconType === 'box'"
-                      x1="12"
-                      y1="22.08"
-                      x2="12"
-                      y2="12"
-                    ></line>
-
-                    <rect
-                      v-if="advantage.iconType === 'calculator'"
-                      x="4"
-                      y="2"
-                      width="16"
-                      height="20"
-                      rx="2"
-                      ry="2"
-                    ></rect>
-                    <line
-                      v-if="advantage.iconType === 'calculator'"
-                      x1="8"
-                      y1="6"
-                      x2="16"
-                      y2="6"
-                    ></line>
-                    <line
-                      v-if="advantage.iconType === 'calculator'"
-                      x1="16"
-                      y1="14"
-                      x2="16"
-                      y2="14.01"
-                    ></line>
-                    <line
-                      v-if="advantage.iconType === 'calculator'"
-                      x1="12"
-                      y1="14"
-                      x2="12"
-                      y2="14.01"
-                    ></line>
-                    <line
-                      v-if="advantage.iconType === 'calculator'"
-                      x1="8"
-                      y1="14"
-                      x2="8"
-                      y2="14.01"
-                    ></line>
-
-                    <polyline
-                      v-if="advantage.iconType === 'check'"
-                      points="20 6 9 17 4 12"
-                    ></polyline>
-
-                    <path v-if="advantage.iconType === 'customize'" d="M12 20h9"></path>
-                    <path
-                      v-if="advantage.iconType === 'customize'"
-                      d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"
-                    ></path>
-                  </svg>
                 </div>
 
                 <!-- Content Body -->
@@ -773,30 +681,6 @@ const serviceVideoPoster = computed(() =>
   serviceImageAsset.value?.url ? getFullUrl(serviceImageAsset.value.url) : null,
 )
 
-const defaultServices = [
-  {
-    iconUrl: null,
-    icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z',
-    title: 'Material Selection',
-    description:
-      'Sourcing the finest fibers globally. From organic cottons to high-tech synthetics, quality starts at the source.',
-  },
-  {
-    iconUrl: null,
-    icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-    title: 'Precision Weaving',
-    description:
-      'Advanced looms meet traditional techniques. We create complex weaves with exacting standards for texture and durability.',
-  },
-  {
-    iconUrl: null,
-    icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
-    title: 'Global Logistics',
-    description:
-      'Seamless delivery to your doorstep. Our logistics network ensures your materials arrive on time, anywhere in the world.',
-  },
-]
-
 const servicesList = computed(() => {
   const cards = servicesArea.value?.card
   if (cards?.length) {
@@ -807,48 +691,12 @@ const servicesList = computed(() => {
       description: card.subTitle || '',
     }))
   }
-  return defaultServices
+  return []
 })
 
 const titleCard = computed(() => servicesArea.value?.titleCard)
 
 // Core Advantages Data
-const defaultAdvantages = [
-  {
-    image:
-      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    iconUrl: null,
-    iconType: 'box',
-    title: 'Packaging',
-    description: "Book a ship's hold for you, load containers, and transport them to the port",
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    iconUrl: null,
-    iconType: 'calculator',
-    title: 'Weaving',
-    description: 'Spinning and weaving process',
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1605280263929-1c42c62ef169?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    iconUrl: null,
-    iconType: 'check',
-    title: 'Select raw materials',
-    description: 'We will use high-quality raw materials to craft your order',
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    iconUrl: null,
-    iconType: 'customize',
-    title: 'Customize',
-    description:
-      'According to your requirements, we can fulfill your customization needs for product design and composition',
-  },
-]
-
 const coreAdvantagesList = computed(() => {
   const cards = homeData.value?.advantageArea
   if (cards?.length) {
@@ -860,7 +708,7 @@ const coreAdvantagesList = computed(() => {
       description: card.subTitle || '',
     }))
   }
-  return defaultAdvantages
+  return []
 })
 
 const productArea = computed(() => homeData.value?.productArea)
