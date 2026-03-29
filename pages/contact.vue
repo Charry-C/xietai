@@ -15,7 +15,7 @@
       ></div>
       <div class="container mx-auto px-6 relative z-10">
         <span
-          class="inline-block text-brand-gold text-xs font-bold tracking-[0.3em] uppercase mb-6 animate-fade-in-up"
+          class="inline-block text-brand-gold text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-fade-in-up"
           >{{ t('hero.contactTagline') }}</span
         >
         <h1

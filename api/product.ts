@@ -1,5 +1,4 @@
-import { strapiFetch } from '@/composables/useStrapiFetch'
-import type { StrapiFetchOptions } from '@/composables/useStrapiFetch'
+import { strapiFetch, strapiRequest, type StrapiFetchOptions } from '@/composables/useStrapiFetch'
 import type { MediaFile } from './home'
 
 export interface ProductBanner {
@@ -34,8 +33,17 @@ export const getProductPage = (options?: StrapiFetchOptions<ProductPageResponse>
   })
 }
 
+// 用于 SSR/响应式数据（在 setup 顶层调用）
 export const getProducts = <T = any>(options?: StrapiFetchOptions<T>) => {
   return strapiFetch.get<T>('/products', options)
+}
+
+// 用于事件处理器中（手动调用，需要传入 locale）
+export const fetchProductsApi = async <T = any>(
+  params: Record<string, any> = {},
+  locale?: string,
+) => {
+  return strapiRequest<T>('/products', 'get', params, undefined, locale)
 }
 
 export const getProduct = <T = any>(id: string | number, options?: StrapiFetchOptions<T>) => {

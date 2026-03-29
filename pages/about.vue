@@ -89,9 +89,9 @@
             :key="item.id"
             class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300"
           >
-            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4"
-              >{{ animatedNums[idx] }}+</span
-            >
+            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4">{{
+              animatedNums[idx]
+            }}</span>
             <span class="text-sm tracking-widest uppercase text-white/60">{{
               item.description
             }}</span>
@@ -101,9 +101,9 @@
           <div
             class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300"
           >
-            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4"
-              >{{ defaultAnimated[0] }}+</span
-            >
+            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4">{{
+              defaultAnimated[0]
+            }}</span>
             <span class="text-sm tracking-widest uppercase text-white/60">{{
               t('about.yearsExperience')
             }}</span>
@@ -111,9 +111,9 @@
           <div
             class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300"
           >
-            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4"
-              >{{ defaultAnimated[1] }}+</span
-            >
+            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4">{{
+              defaultAnimated[1]
+            }}</span>
             <span class="text-sm tracking-widest uppercase text-white/60">{{
               t('about.exportCountries')
             }}</span>
@@ -121,9 +121,9 @@
           <div
             class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300"
           >
-            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4"
-              >{{ defaultAnimated[2] }}M+</span
-            >
+            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4">{{
+              defaultAnimated[2]
+            }}</span>
             <span class="text-sm tracking-widest uppercase text-white/60">{{
               t('about.metersPerMonth')
             }}</span>

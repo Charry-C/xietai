@@ -34,7 +34,7 @@
 
       <div class="container mx-auto px-4 sm:px-6 relative z-10 text-center max-w-4xl">
         <span
-          class="inline-block py-1 px-3 border border-brand-gold/50 rounded-full text-brand-gold text-xs font-bold tracking-widest uppercase mb-4 md:mb-6 animate-fade-in-up"
+          class="inline-block py-1 px-3 border border-brand-gold/50 rounded-full text-brand-gold text-sm font-bold tracking-widest uppercase mb-4 md:mb-6 animate-fade-in-up"
         >
           {{ t('hero.tagline') }}
         </span>

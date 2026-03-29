@@ -15,7 +15,7 @@
       ></div>
       <div class="container mx-auto px-6 relative z-10 text-center">
         <span
-          class="inline-block text-brand-gold text-xs font-bold tracking-[0.3em] uppercase mb-6 animate-fade-in-up"
+          class="inline-block text-brand-gold text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-fade-in-up"
           >{{ t('hero.productsTagline') }}</span
         >
         <h1
@@ -286,14 +286,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
-import { getProducts, getProductPage, type ProductPageData } from '@/api/product'
-import { strapiFetch } from '@/composables/useStrapiFetch'
+import { ref, computed } from 'vue'
+import { fetchProductsApi, getProductPage, type ProductPageData } from '@/api/product'
+import { strapiRequest } from '@/composables/useStrapiFetch'
+import { useLocale } from '@/composables/useLocale'
 
 const config = useRuntimeConfig()
 const baseUrl = config.public.base || ''
 const { t } = useI18n()
 const localePath = useLocalePath()
+const { strapiLocale } = useLocale()
 const getFullUrl = (url: string) => {
   if (!url) return ''
   return url.startsWith('http') ? url : `${baseUrl}${url}`
@@ -332,26 +334,30 @@ const currentCategoryName = computed(() => {
   return category?.attributes?.name || category?.name || t('common.category')
 })
 
-// Fetch Categories
+// Fetch Categories - uses $fetch for both SSR and client
 const fetchCategories = async () => {
   try {
-    const { data } = await strapiFetch.get<any>('/categories', {
-      query: {
+    const { data, error } = await strapiRequest<any>(
+      '/categories',
+      'get',
+      {
         sort: 'id:asc',
         'pagination[pageSize]': 100,
       },
-    })
-    categories.value = data.value?.data || []
-
-    // Default to first category if available, or keep null for "All"
-    // activeCategory.value = categories.value[0]?.id ?? null
-    // Let's default to null (All) for better UX unless specified otherwise
+      undefined,
+      strapiLocale.value,
+    )
+    if (error) {
+      console.error('Error fetching categories:', error)
+      return
+    }
+    categories.value = data?.data || []
   } catch (e) {
     console.error('Error fetching categories:', e)
   }
 }
 
-// Fetch Products
+// Fetch Products - uses $fetch for both SSR and client
 const fetchProducts = async () => {
   loading.value = true
   try {
@@ -365,14 +371,23 @@ const fetchProducts = async () => {
       query['filters[category][id][$eq]'] = activeCategory.value
     }
 
-    const { data } = await getProducts<any>({ query })
-    const list = data.value?.data ?? []
-    products.value = list.map((item: any) => ({
-      ...item,
-      url: getStrapiImage(item.image, 'large'),
-    }))
+    const { data, error } = await fetchProductsApi<any>(query, strapiLocale.value)
+    if (error) {
+      console.error('Error fetching products:', error)
+      return
+    }
 
-    total.value = data.value?.meta?.pagination?.total ?? 0
+    const list = data?.data ?? []
+    products.value = list.map((item: any) => {
+      // Handle Strapi v5 image format (image.data or image directly)
+      const imageData = item.image?.data || item.image
+      return {
+        ...item,
+        url: getStrapiImage(imageData, 'large'),
+      }
+    })
+
+    total.value = data?.meta?.pagination?.total ?? 0
   } catch (e) {
     console.error('Error fetching products:', e)
   } finally {
