@@ -54,13 +54,13 @@
           class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 animate-fade-in-up animation-delay-300"
         >
           <NuxtLink
-            to="/products"
+            :to="localePath('/products')"
             class="bg-brand-gold text-white px-6 sm:px-10 py-3 sm:py-4 font-bold tracking-wide hover:bg-white hover:text-brand-navy transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
           >
             {{ t('hero.viewCollections') }}
           </NuxtLink>
           <NuxtLink
-            to="/contact"
+            :to="localePath('/contact')"
             class="px-6 sm:px-10 py-3 sm:py-4 border border-white/30 text-white font-bold tracking-wide hover:bg-white hover:text-brand-navy transition-all duration-300 backdrop-blur-sm text-sm sm:text-base"
           >
             {{ t('hero.partnerWithUs') }}
@@ -75,7 +75,7 @@
         <div
           class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16"
         >
-          <NuxtLink to="/products" class="group">
+          <NuxtLink :to="localePath('/products')" class="group">
             <span
               class="text-brand-gold font-bold tracking-widest uppercase text-xs sm:text-sm mb-2 md:mb-3 block"
               >{{ homeData?.productArea?.subTitle || t('home.ourCollection') }}</span
@@ -87,7 +87,7 @@
             </h2>
           </NuxtLink>
           <NuxtLink
-            to="/products"
+            :to="localePath('/products')"
             class="hidden md:inline-flex items-center gap-2 text-brand-gold hover:text-white transition-colors font-medium"
           >
             {{ t('home.viewAllProducts') }}
@@ -142,7 +142,7 @@
 
         <div class="mt-10 md:mt-12 text-center md:hidden">
           <NuxtLink
-            to="/products"
+            :to="localePath('/products')"
             class="inline-block border border-brand-gold text-brand-gold px-6 sm:px-8 py-3 font-bold hover:bg-brand-gold hover:text-brand-navy transition-colors text-sm sm:text-base"
           >
             {{ t('home.viewAllProducts') }}
@@ -477,7 +477,7 @@
           {{ t('home.ctaDescription') }}
         </p>
         <NuxtLink
-          to="/contact"
+          :to="localePath('/contact')"
           class="inline-block bg-brand-navy text-white px-8 sm:px-12 py-4 sm:py-5 font-bold tracking-wide hover:bg-brand-gold transition-colors duration-300 shadow-2xl text-sm sm:text-base"
         >
           {{ t('home.inquiryQuotation') }}
@@ -493,6 +493,7 @@ import { computed, ref, onMounted, onUnmounted } from 'vue'
 
 const { t } = useI18n()
 const config = useRuntimeConfig()
+const localePath = useLocalePath()
 
 // Intersection Observer for Core Advantages animation
 const coreAdvantagesRef = ref<HTMLElement | null>(null)

@@ -226,9 +226,6 @@
             </div>
 
             <div class="text-center group-hover:-translate-y-1 transition-transform duration-300">
-              <span class="text-xs text-gray-500 uppercase tracking-widest mb-2 block">
-                {{ p.attributes?.category?.data?.attributes?.name || t('common.textile') }}
-              </span>
               <h3
                 class="text-base md:text-xl font-serif font-bold text-brand-navy mb-2 group-hover:text-brand-gold transition-colors"
               >

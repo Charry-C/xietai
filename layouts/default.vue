@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen flex flex-col font-serif bg-brand-cream text-neutral-800 antialiased selection:bg-brand-gold selection:text-white"
+    class="min-h-screen flex flex-col font-serif bg-brand-cream text-neutral-800 antialiased selection:bg-brand-gold selection:text-white overflow-x-hidden"
   >
     <!-- Header -->
     <header

@@ -277,43 +277,22 @@ const fetchProduct = async (id: string) => {
     const attributes = item.attributes || item
 
     // Process images
-    // Assuming 'image' is the field name for product images
     const rawImages = attributes.image || []
-    // Ensure rawImages is an array (Strapi might return a single object for single media field)
     const imageList = Array.isArray(rawImages) ? rawImages : [rawImages]
 
     const images = imageList
-      .filter((img: any) => img) // Filter out nulls
+      .filter((img: any) => img)
       .map((img: any) => getStrapiImage([img], 'large'))
-      .filter((url: string) => url) // Filter out empty URLs
+      .filter((url: string) => url)
+
+    // Get specs directly from API response
+    const specs: Record<string, string> = attributes.specs || {}
 
     return {
       id: item.documentId || String(item.id),
       name: attributes.name,
       images: images,
-      // Mock specs as requested
-      specs: {
-        Material: 'Rayon / Linen, linen',
-        Pattern: 'Customized Pattern',
-        'Place of Origin': 'China',
-        'Applicable to the Crowd': 'Women, Men, Girls, Boys, Infant/Baby',
-        Density: 'Customized Density',
-        'Supply Type': 'Make-To-Order',
-        Technics: 'Woven',
-        Thickness: 'Lightweight',
-        Type: 'Printing Fabric',
-        Weight: 'Customized Weight',
-        Width: 'Customized Width',
-        'Yarn Count': '20*20',
-        'Product name': 'Linen Rayon Viscose Fabric',
-        Usage: 'Clothing',
-        Color: 'Customized Color',
-        MOQ: '1 Meter',
-        Design: 'Accept Custom Designs',
-        Quality: 'High Grade Linen Fabric',
-        Packing: 'Roll Packing',
-        'OEM & ODM': 'WELCOMED',
-      },
+      specs: specs,
     }
   } catch (e) {
     console.error('Error fetching product:', e)
@@ -352,7 +331,7 @@ onMounted(async () => {
   try {
     const data = await fetchProduct(route.params.id as string)
     product.value = data
-    if (data.images.length > 0) {
+    if (data && data.images.length > 0) {
       activeImage.value = data.images[0]
     }
   } catch (e) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-brand-cream min-h-screen">
+  <div class="bg-brand-cream min-h-screen overflow-x-hidden">
     <!-- Hero Section -->
     <section class="relative py-32 md:py-48 overflow-hidden bg-brand-navy text-white">
       <div v-if="bannerBgUrl" class="absolute inset-0">
