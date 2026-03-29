@@ -36,7 +36,7 @@
         <span
           class="inline-block py-1 px-3 border border-brand-gold/50 rounded-full text-brand-gold text-xs font-bold tracking-widest uppercase mb-4 md:mb-6 animate-fade-in-up"
         >
-          Xie Tai - Premium Customization
+          {{ t('hero.tagline') }}
         </span>
         <h1
           class="text-3xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 leading-tight animate-fade-in-up animation-delay-100 px-2"
@@ -57,13 +57,13 @@
             to="/products"
             class="bg-brand-gold text-white px-6 sm:px-10 py-3 sm:py-4 font-bold tracking-wide hover:bg-white hover:text-brand-navy transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
           >
-            View Collections
+            {{ t('hero.viewCollections') }}
           </NuxtLink>
           <NuxtLink
             to="/contact"
             class="px-6 sm:px-10 py-3 sm:py-4 border border-white/30 text-white font-bold tracking-wide hover:bg-white hover:text-brand-navy transition-all duration-300 backdrop-blur-sm text-sm sm:text-base"
           >
-            Partner With Us
+            {{ t('hero.partnerWithUs') }}
           </NuxtLink>
         </div>
       </div>
@@ -75,20 +75,22 @@
         <div
           class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16"
         >
-          <div>
+          <NuxtLink to="/products" class="group">
             <span
               class="text-brand-gold font-bold tracking-widest uppercase text-xs sm:text-sm mb-2 md:mb-3 block"
-              >{{ homeData?.productArea?.subTitle || 'Our Collection' }}</span
+              >{{ homeData?.productArea?.subTitle || t('home.ourCollection') }}</span
             >
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy">
-              {{ homeData?.productArea?.title || 'Featured Fabrics' }}
+            <h2
+              class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy group-hover:text-brand-gold transition-colors"
+            >
+              {{ homeData?.productArea?.title || t('home.featuredFabrics') }}
             </h2>
-          </div>
+          </NuxtLink>
           <NuxtLink
             to="/products"
             class="hidden md:inline-flex items-center gap-2 text-brand-gold hover:text-white transition-colors font-medium"
           >
-            View All Products
+            {{ t('home.viewAllProducts') }}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
@@ -125,9 +127,9 @@
             <div
               class="absolute bottom-0 left-0 p-4 sm:p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300"
             >
-              <span class="text-brand-gold text-xs font-bold uppercase tracking-wider mb-2 block"
-                >Collection</span
-              >
+              <span class="text-brand-gold text-xs font-bold uppercase tracking-wider mb-2 block">{{
+                t('home.collection')
+              }}</span>
               <h3 class="text-xl sm:text-2xl font-bold mb-2">{{ product.title }}</h3>
               <p
                 class="text-white/60 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100"
@@ -143,7 +145,7 @@
             to="/products"
             class="inline-block border border-brand-gold text-brand-gold px-6 sm:px-8 py-3 font-bold hover:bg-brand-gold hover:text-brand-navy transition-colors text-sm sm:text-base"
           >
-            View All Products
+            {{ t('home.viewAllProducts') }}
           </NuxtLink>
         </div>
       </div>
@@ -170,10 +172,10 @@
       <div class="container mx-auto px-4 sm:px-6 relative z-20">
         <div class="text-center mb-6">
           <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy">
-            {{ homeData?.servicesArea?.title || 'Comprehensive Services' }}
+            {{ homeData?.servicesArea?.title || t('home.comprehensiveServices') }}
           </h2>
           <span class="text-brand-gold font-bold tracking-widest uppercase text-sm mt-5 block">
-            {{ homeData?.servicesArea?.subTitle || 'Our Expertise' }}
+            {{ homeData?.servicesArea?.subTitle || t('home.ourExpertise') }}
           </span>
         </div>
 
@@ -185,13 +187,13 @@
               v-if="serviceVideoUrl"
               :src="serviceVideoUrl"
               :poster="serviceVideoPoster"
-              :title="homeData?.servicesArea?.title || 'Services Reel'"
+              :title="homeData?.servicesArea?.title || t('home.servicesReel')"
             />
             <img
               v-else-if="serviceVideoPoster"
               :src="serviceVideoPoster"
               class="w-full h-full object-cover"
-              alt="Services"
+              :alt="t('nav.services')"
             />
             <div v-else class="w-full h-full bg-brand-navy"></div>
           </div>
@@ -199,16 +201,15 @@
             class="lg:col-span-2 bg-white/90 backdrop-blur-sm border border-brand-gold/20 p-6 sm:p-8 md:p-10 flex flex-col justify-center"
           >
             <p class="text-sm uppercase tracking-[0.24em] text-brand-gold font-semibold mb-4">
-              {{ titleCard?.subTitle || 'Service Vision' }}
+              {{ titleCard?.subTitle || t('home.serviceVision') }}
             </p>
             <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-brand-navy mb-4 md:mb-5">
-              {{ titleCard?.title || homeData?.servicesArea?.title || 'Comprehensive Services' }}
+              {{
+                titleCard?.title || homeData?.servicesArea?.title || t('home.comprehensiveServices')
+              }}
             </h3>
             <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
-              {{
-                titleCard?.description ||
-                'Integrated manufacturing, process control and worldwide delivery from one textile partner.'
-              }}
+              {{ titleCard?.description || t('home.servicesDescription') }}
             </p>
           </div>
         </div>
@@ -256,7 +257,7 @@
           :class="isAdvantagesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'"
         >
           <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy uppercase">
-            Our Advantages
+            {{ t('home.ourAdvantages') }}
           </h2>
         </div>
 
@@ -402,14 +403,14 @@
                 <img
                   v-else
                   :src="getFullUrl(aboutPrimaryMedia.url)"
-                  :alt="aboutPrimaryMedia.alternativeText || 'About Us'"
+                  :alt="aboutPrimaryMedia.alternativeText || t('home.aboutAlt')"
                   class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />
               </template>
               <img
                 v-else
                 src="https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                alt="Fabric Texture"
+                :alt="t('home.fabricTextureAlt')"
                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
@@ -427,8 +428,8 @@
                 {{ homeData.aboutArea.title }}
               </template>
               <template v-else>
-                Weaving Tradition <br />
-                <span class="text-brand-gold italic">with Innovation</span>
+                {{ t('home.aboutTitlePart1') }} <br />
+                <span class="text-brand-gold italic">{{ t('home.aboutTitlePart2') }}</span>
               </template>
             </h2>
             <div class="w-20 h-1 bg-brand-gold mb-8"></div>
@@ -448,15 +449,15 @@
               <template v-else>
                 <div>
                   <span class="block text-4xl font-bold text-brand-navy mb-2">25+</span>
-                  <span class="text-sm text-gray-500 uppercase tracking-wider"
-                    >Years Experience</span
-                  >
+                  <span class="text-sm text-gray-500 uppercase tracking-wider">{{
+                    t('home.yearsExperience')
+                  }}</span>
                 </div>
                 <div>
                   <span class="block text-4xl font-bold text-brand-navy mb-2">10M+</span>
-                  <span class="text-sm text-gray-500 uppercase tracking-wider"
-                    >Meters Annually</span
-                  >
+                  <span class="text-sm text-gray-500 uppercase tracking-wider">{{
+                    t('home.metersAnnually')
+                  }}</span>
                 </div>
               </template>
             </div>
@@ -470,16 +471,16 @@
       <div class="absolute inset-0 bg-brand-cream"></div>
       <div class="container mx-auto px-4 sm:px-6 relative z-10 text-center">
         <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold text-brand-navy mb-6 md:mb-8">
-          Contact Us
+          {{ t('home.contactUs') }}
         </h2>
         <p class="text-base sm:text-xl text-gray-500 mb-8 md:mb-10 max-w-2xl mx-auto px-2">
-          We offer manufacturing solutions tailored to your brand's specific needs.
+          {{ t('home.ctaDescription') }}
         </p>
         <NuxtLink
           to="/contact"
           class="inline-block bg-brand-navy text-white px-8 sm:px-12 py-4 sm:py-5 font-bold tracking-wide hover:bg-brand-gold transition-colors duration-300 shadow-2xl text-sm sm:text-base"
         >
-          Inquiry & Quotation
+          {{ t('home.inquiryQuotation') }}
         </NuxtLink>
       </div>
     </section>
@@ -490,6 +491,7 @@
 import { getHomeData, type HomeData, type MediaFile } from '@/api/home'
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 
+const { t } = useI18n()
 const config = useRuntimeConfig()
 
 // Intersection Observer for Core Advantages animation
@@ -635,9 +637,7 @@ const homeData = computed<HomeData | null>(() => {
 })
 
 const bannerDescription = computed(
-  () =>
-    homeData.value?.bannerArea?.subTitle ||
-    'From raw fiber to finished fabric, Xietai delivers excellence in every thread. Your trusted global partner for innovative textile solutions.',
+  () => homeData.value?.bannerArea?.subTitle || t('home.bannerDescriptionFallback'),
 )
 
 const heroBackgroundUrl = computed(() => {
@@ -652,11 +652,7 @@ const aboutPrimaryMedia = computed<MediaFile | null>(() => {
   return normalizeMediaList(aboutArea.value?.companyImgs)[0] || null
 })
 
-const aboutLeadText = computed(
-  () =>
-    aboutArea.value?.subTitle ||
-    'Established in 1998, Xietai has grown from a local weaving mill to a global textile powerhouse focused on high-performance fabrics.',
-)
+const aboutLeadText = computed(() => aboutArea.value?.subTitle || t('home.aboutLeadFallback'))
 
 const aboutBackgroundUrl = computed(() => getAreaBackgroundUrl(aboutArea.value))
 

@@ -1,23 +1,31 @@
 <template>
-  <div class="min-h-screen flex flex-col font-sans bg-brand-cream text-neutral-800 antialiased selection:bg-brand-gold selection:text-white">
+  <div
+    class="min-h-screen flex flex-col font-sans bg-brand-cream text-neutral-800 antialiased selection:bg-brand-gold selection:text-white"
+  >
     <!-- Header -->
-    <header 
+    <header
       class="fixed w-full top-0 z-50 transition-all duration-300 border-b border-transparent"
-      :class="[scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-neutral-100 py-3' : 'bg-transparent py-6']"
+      :class="[
+        scrolled
+          ? 'bg-white/90 backdrop-blur-md shadow-sm border-neutral-100 py-3'
+          : 'bg-transparent py-6',
+      ]"
     >
       <div class="container mx-auto px-6 flex justify-between items-center">
         <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center group">
-          <span class="font-serif text-2xl font-bold tracking-tight text-brand-navy group-hover:text-brand-gold transition-colors duration-300">
-            XIETAI
+        <NuxtLink :to="localePath('/')" class="flex items-center group">
+          <span
+            class="font-serif text-2xl font-bold tracking-tight text-brand-navy group-hover:text-brand-gold transition-colors duration-300"
+          >
+            {{ globalData?.siteName || t('common.brand') }}
             <span class="text-brand-gold">.</span>
           </span>
         </NuxtLink>
 
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex items-center gap-8">
-          <NuxtLink 
-            v-for="link in navLinks" 
+          <NuxtLink
+            v-for="link in navLinks"
             :key="link.path"
             :to="link.path"
             class="text-sm font-medium tracking-wide uppercase hover:text-brand-gold transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-brand-gold after:transition-all hover:after:w-full"
@@ -25,18 +33,29 @@
           >
             {{ link.name }}
           </NuxtLink>
+          <div class="w-px h-4 bg-brand-navy/20"></div>
+          <LanguageSwitcher />
         </nav>
 
         <!-- Mobile Menu Button -->
-        <button 
+        <button
           @click="mobileOpen = !mobileOpen"
           class="md:hidden p-2 text-brand-navy hover:text-brand-gold transition-colors focus:outline-none"
-          aria-label="Toggle menu"
+          :aria-label="t('nav.toggleMenu')"
         >
           <div class="w-6 h-5 relative flex flex-col justify-between">
-            <span class="w-full h-0.5 bg-current transform transition-transform origin-left" :class="mobileOpen ? 'rotate-45 translate-x-1' : ''"></span>
-            <span class="w-full h-0.5 bg-current transition-opacity" :class="mobileOpen ? 'opacity-0' : ''"></span>
-            <span class="w-full h-0.5 bg-current transform transition-transform origin-left" :class="mobileOpen ? '-rotate-45 translate-x-1' : ''"></span>
+            <span
+              class="w-full h-0.5 bg-current transform transition-transform origin-left"
+              :class="mobileOpen ? 'rotate-45 translate-x-1' : ''"
+            ></span>
+            <span
+              class="w-full h-0.5 bg-current transition-opacity"
+              :class="mobileOpen ? 'opacity-0' : ''"
+            ></span>
+            <span
+              class="w-full h-0.5 bg-current transform transition-transform origin-left"
+              :class="mobileOpen ? '-rotate-45 translate-x-1' : ''"
+            ></span>
           </div>
         </button>
       </div>
@@ -51,13 +70,13 @@
       leave-from-class="opacity-100 translate-y-0"
       leave-to-class="opacity-0 translate-y-4"
     >
-      <div 
-        v-if="mobileOpen" 
+      <div
+        v-if="mobileOpen"
         class="fixed inset-0 z-40 bg-brand-navy/95 backdrop-blur-xl md:hidden pt-24 px-6"
       >
         <nav class="flex flex-col gap-6 items-center">
-          <NuxtLink 
-            v-for="link in navLinks" 
+          <NuxtLink
+            v-for="link in navLinks"
             :key="link.path"
             :to="link.path"
             class="text-2xl font-serif text-white hover:text-brand-gold transition-colors"
@@ -65,6 +84,8 @@
           >
             {{ link.name }}
           </NuxtLink>
+          <div class="w-10 h-px bg-white/20 mt-4 mb-2"></div>
+          <LanguageSwitcher :is-mobile="true" @switch="mobileOpen = false" />
         </nav>
       </div>
     </transition>
@@ -79,12 +100,15 @@
       <div class="container mx-auto px-6">
         <!-- Row 1: Company Introduction -->
         <div class="mb-12">
-          <NuxtLink to="/" class="inline-block font-serif text-4xl font-bold tracking-tight mb-6">
-            XIETAI
+          <NuxtLink
+            :to="localePath('/')"
+            class="inline-block font-serif text-4xl font-bold tracking-tight mb-6"
+          >
+            {{ globalData?.siteName || t('common.brand') }}
             <span class="text-brand-gold">.</span>
           </NuxtLink>
           <p class="text-white/60 text-lg leading-[2] max-w-2xl">
-            Crafting exceptional textiles since 1998. We blend traditional craftsmanship with modern innovation to deliver premium fabrics worldwide.
+            {{ globalData?.siteIntro || t('footer.companyIntro') }}
           </p>
         </div>
 
@@ -92,91 +116,218 @@
         <div class="hidden md:grid grid-cols-3 gap-12 mb-16">
           <!-- Column 1: Navigation -->
           <div>
-            <h4 class="font-serif text-lg mb-8 text-brand-gold uppercase tracking-wider">Navigation</h4>
+            <h4 class="font-serif text-lg mb-8 text-brand-gold uppercase tracking-wider">
+              {{ t('footer.navigation') }}
+            </h4>
             <ul class="space-y-4 text-white/70">
-              <li><NuxtLink to="/" class="hover:text-brand-gold transition-colors">Home</NuxtLink></li>
-              <li><NuxtLink to="/products" class="hover:text-brand-gold transition-colors">Products</NuxtLink></li>
-              <li><NuxtLink to="/services" class="hover:text-brand-gold transition-colors">Services</NuxtLink></li>
-              <li><NuxtLink to="/about" class="hover:text-brand-gold transition-colors">About Us</NuxtLink></li>
-              <li><NuxtLink to="/contact" class="hover:text-brand-gold transition-colors">Contact Us</NuxtLink></li>
+              <li>
+                <NuxtLink :to="localePath('/')" class="hover:text-brand-gold transition-colors">{{
+                  t('nav.home')
+                }}</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink
+                  :to="localePath('/products')"
+                  class="hover:text-brand-gold transition-colors"
+                  >{{ t('nav.products') }}</NuxtLink
+                >
+              </li>
+              <li>
+                <NuxtLink
+                  :to="localePath('/services')"
+                  class="hover:text-brand-gold transition-colors"
+                  >{{ t('nav.services') }}</NuxtLink
+                >
+              </li>
+              <li>
+                <NuxtLink
+                  :to="localePath('/about')"
+                  class="hover:text-brand-gold transition-colors"
+                  >{{ t('nav.aboutUs') }}</NuxtLink
+                >
+              </li>
+              <li>
+                <NuxtLink
+                  :to="localePath('/contact')"
+                  class="hover:text-brand-gold transition-colors"
+                  >{{ t('nav.contactUs') }}</NuxtLink
+                >
+              </li>
             </ul>
           </div>
-          
+
           <!-- Column 2: Products -->
           <div>
-            <h4 class="font-serif text-lg mb-8 text-brand-gold uppercase tracking-wider">Products</h4>
+            <h4 class="font-serif text-lg mb-8 text-brand-gold uppercase tracking-wider">
+              {{ t('footer.products') }}
+            </h4>
             <ul class="space-y-4 text-white/70">
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Linen Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Suit Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Shirt Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Lady Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Workwear Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Medical Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Thobe Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Pocket Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Wax Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Casual Fabric</a></li>
-              <li><a href="#" class="hover:text-brand-gold transition-colors uppercase">Greige Fabric</a></li>
+              <li v-for="category in footerCategories" :key="category.id">
+                <NuxtLink
+                  :to="localePath(`/products?category=${category.id}`)"
+                  class="hover:text-brand-gold transition-colors uppercase"
+                >
+                  {{ category.name }}
+                </NuxtLink>
+              </li>
+              <li v-if="footerCategories.length === 0">
+                <NuxtLink
+                  :to="localePath('/products')"
+                  class="hover:text-brand-gold transition-colors uppercase"
+                >
+                  {{ t('common.viewAll') }}
+                </NuxtLink>
+              </li>
             </ul>
           </div>
-          
+
           <!-- Column 3: Connect Way -->
           <div>
-            <h4 class="font-serif text-lg mb-8 text-brand-gold uppercase tracking-wider">Connect Way</h4>
+            <h4 class="font-serif text-lg mb-8 text-brand-gold uppercase tracking-wider">
+              {{ t('footer.connectWay') }}
+            </h4>
             <ul class="space-y-6 text-white/70">
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-brand-gold flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              <li v-for="item in footerContacts" :key="item.type" class="flex items-start gap-3">
+                <!-- Phone icon -->
+                <svg
+                  v-if="item.type === 'phone'"
+                  class="w-5 h-5 text-brand-gold flex-shrink-0 mt-0.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
                 </svg>
-                <span>+86 189 3189 0816</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-brand-gold flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <!-- Email icon -->
+                <svg
+                  v-else-if="item.type === 'email'"
+                  class="w-5 h-5 text-brand-gold flex-shrink-0 mt-0.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
                 </svg>
-                <a href="mailto:jason.l@shuolantextile.com" class="hover:text-brand-gold transition-colors">jason.l@shuolantextile.com</a>
-              </li>
-              <li class="flex items-start gap-3">
-                <svg class="w-5 h-5 text-brand-gold mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                <!-- Address icon -->
+                <svg
+                  v-else
+                  class="w-5 h-5 text-brand-gold flex-shrink-0 mt-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
                 </svg>
-                <span class="leading-relaxed">Rm 2501, Wanda Office Building B, 583 East Zhongshan Road, Chang'an District, Shijiazhuang City, Hebei Province, China.050000</span>
+                <span v-if="item.type === 'email'" class="leading-relaxed"
+                  ><a
+                    :href="`mailto:${item.value}`"
+                    class="hover:text-brand-gold transition-colors"
+                    >{{ item.value }}</a
+                  ></span
+                >
+                <span v-else class="leading-relaxed">{{ item.value }}</span>
               </li>
             </ul>
-            
+
             <!-- Social Icons -->
-            <div class="flex gap-4 mt-8">
-              <a href="#" class="w-10 h-10 bg-white flex items-center justify-center hover:bg-brand-gold transition-colors group">
-                <svg class="w-5 h-5 text-brand-navy group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+            <div v-if="footerSocials.length" class="flex gap-4 mt-8">
+              <a
+                v-for="social in footerSocials"
+                :key="social.type"
+                :href="social.url || '#'"
+                class="w-10 h-10 bg-white flex items-center justify-center hover:bg-brand-gold transition-colors group"
+              >
+                <!-- Facebook -->
+                <svg
+                  v-if="social.type === 'facebook'"
+                  class="w-5 h-5 text-brand-navy group-hover:text-white transition-colors"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"
+                  />
                 </svg>
-              </a>
-              <a href="#" class="w-10 h-10 bg-white flex items-center justify-center hover:bg-brand-gold transition-colors group">
-                <svg class="w-5 h-5 text-brand-navy group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                <!-- LinkedIn -->
+                <svg
+                  v-else-if="social.type === 'linkedin'"
+                  class="w-5 h-5 text-brand-navy group-hover:text-white transition-colors"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                  />
                 </svg>
-              </a>
-              <a href="#" class="w-10 h-10 bg-white flex items-center justify-center hover:bg-brand-gold transition-colors group">
-                <svg class="w-5 h-5 text-brand-navy group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                <!-- Twitter -->
+                <svg
+                  v-else-if="social.type === 'twitter'"
+                  class="w-5 h-5 text-brand-navy group-hover:text-white transition-colors"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"
+                  />
                 </svg>
-              </a>
-              <a href="#" class="w-10 h-10 bg-white flex items-center justify-center hover:bg-brand-gold transition-colors group">
-                <svg class="w-5 h-5 text-brand-navy group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                <!-- Instagram -->
+                <svg
+                  v-else-if="social.type === 'instagram'"
+                  class="w-5 h-5 text-brand-navy group-hover:text-white transition-colors"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                  />
                 </svg>
+                <!-- Generic fallback -->
+                <span
+                  v-else
+                  class="text-xs font-bold text-brand-navy group-hover:text-white transition-colors uppercase"
+                  >{{ social.label?.charAt(0) }}</span
+                >
               </a>
             </div>
           </div>
         </div>
-        
+
         <!-- Row 3: Copyright & Links -->
-        <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/40">
-          <p>&copy; {{ new Date().getFullYear() }} Xietai Textile Corp. All rights reserved.</p>
+        <div
+          class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/40"
+        >
+          <p>
+            &copy; {{ new Date().getFullYear() }}
+            {{ globalData?.siteName || t('footer.copyright') }}
+          </p>
           <div class="flex gap-6">
-            <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+            <a href="#" class="hover:text-white transition-colors">{{
+              t('footer.privacyPolicy')
+            }}</a>
+            <a href="#" class="hover:text-white transition-colors">{{
+              t('footer.termsOfService')
+            }}</a>
           </div>
         </div>
       </div>
@@ -185,16 +336,73 @@
 </template>
 
 <script setup lang="ts">
+import { getGlobalData, type GlobalData } from '@/api/global'
+import { strapiFetch } from '@/composables/useStrapiFetch'
+
 const mobileOpen = ref(false)
 const scrolled = ref(false)
 
-const navLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'Products', path: '/products' },
-  { name: 'Services', path: '/services' },
-  { name: 'About', path: '/about' },
-  { name: 'Contact', path: '/contact' }
-]
+const { t, locale } = useI18n()
+const localePath = useLocalePath()
+
+// Fetch global data with a unique key for layout
+const { data: globalResponse } = await getGlobalData({
+  key: `global-data-${locale.value}`,
+})
+const globalData = computed<GlobalData | null>(() => globalResponse.value?.data || null)
+
+// Fetch categories for footer
+const { data: categoriesResponse } = await strapiFetch.get<{
+  data: { id: number; documentId: string; name: string }[]
+}>('/categories', {
+  key: `footer-categories-${locale.value}`,
+  query: {
+    sort: 'id:asc',
+    'pagination[pageSize]': 20,
+  },
+})
+const footerCategories = computed(() => categoriesResponse.value?.data || [])
+
+// Resolve localized value (handles { en, zh } objects for Chinese locale)
+const resolveLocaleValue = (val: any): string => {
+  if (typeof val === 'string') return val
+  if (val && typeof val === 'object') {
+    const langKey = locale.value === 'cn' ? 'zh' : 'en'
+    return val[langKey] || val.en || ''
+  }
+  return ''
+}
+
+// Build footer contacts from API data
+const footerContacts = computed(() => {
+  const contacts = globalData.value?.connectWay?.contacts
+  if (!contacts?.length) return []
+  return contacts.map((c) => {
+    if (c.type === 'address' && typeof c.value === 'object') {
+      const v = c.value
+      const parts = [
+        resolveLocaleValue(v.line1),
+        resolveLocaleValue(v.area),
+        resolveLocaleValue(v.city),
+        resolveLocaleValue(v.country),
+      ].filter(Boolean)
+      return { type: c.type, label: resolveLocaleValue(c.label), value: parts.join(', ') }
+    }
+    return { type: c.type, label: resolveLocaleValue(c.label), value: String(c.value) }
+  })
+})
+
+const footerSocials = computed(() => {
+  return globalData.value?.connectWay?.socials?.filter((s) => s.url) || []
+})
+
+const navLinks = computed(() => [
+  { name: t('nav.home'), path: localePath('/') },
+  { name: t('nav.products'), path: localePath('/products') },
+  { name: t('nav.services'), path: localePath('/services') },
+  { name: t('nav.about'), path: localePath('/about') },
+  { name: t('nav.contact'), path: localePath('/contact') },
+])
 
 onMounted(() => {
   window.addEventListener('scroll', () => {

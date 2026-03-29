@@ -2,11 +2,25 @@
   <div class="bg-brand-cream min-h-screen">
     <!-- Hero Section -->
     <section class="relative py-32 md:py-48 overflow-hidden bg-brand-navy text-white">
-      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center opacity-30"></div>
+      <div v-if="bannerBgUrl" class="absolute inset-0">
+        <img :src="bannerBgUrl" class="w-full h-full object-cover opacity-30" alt="Banner" />
+      </div>
+      <div
+        v-else
+        class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center opacity-30"
+      ></div>
       <div class="container mx-auto px-6 relative z-10 text-center">
-        <span class="block text-brand-gold font-bold tracking-[0.2em] uppercase text-sm mb-6 animate-fade-in-up">Since 1998</span>
-        <h1 class="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight animate-fade-in-up animation-delay-100">
-          Weaving the Fabric<br>of <span class="text-brand-gold italic">Excellence</span>
+        <span
+          class="block text-brand-gold font-bold tracking-[0.2em] uppercase text-sm mb-6 animate-fade-in-up"
+          >{{ t('hero.since') }}</span
+        >
+        <h1
+          class="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight animate-fade-in-up animation-delay-100"
+        >
+          {{ t('hero.aboutTitle') }}<br /><span class="text-brand-gold italic">{{
+            t('hero.aboutTitleHighlight')
+          }}</span
+          >{{ t('hero.aboutTitleSuffix') }}
         </h1>
       </div>
     </section>
@@ -16,33 +30,42 @@
       <div class="container mx-auto px-6">
         <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           <div class="w-full lg:w-1/2 relative">
-             <div class="relative z-10 aspect-[4/5] overflow-hidden bg-gray-200 shadow-2xl">
-               <img src="https://images.unsplash.com/photo-1534643960519-11ad79bc19df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Factory Floor" class="w-full h-full object-cover">
-             </div>
-             <!-- Decorative -->
-             <div class="absolute -top-10 -left-10 w-40 h-40 bg-brand-gold/10 rounded-full z-0"></div>
-             <div class="absolute -bottom-10 -right-10 w-full h-full border border-brand-navy/10 z-0"></div>
-          </div>
-          
-          <div class="w-full lg:w-1/2">
-            <h2 class="text-4xl md:text-5xl font-serif font-bold text-brand-navy mb-8">Who We Are</h2>
-            <div class="w-20 h-1 bg-brand-gold mb-8"></div>
-            <div class="space-y-6 text-lg text-gray-600 leading-relaxed">
-              <p>
-                <strong class="text-brand-navy">Xietai Trade Corp</strong> emerged from the heart of China's textile district with a singular vision: to bridge the gap between traditional craftsmanship and modern industrial capability.
-              </p>
-              <p>
-                Over the past two decades, we have evolved from a modest weaving mill into a comprehensive textile solutions provider. Our journey is defined by a relentless pursuit of quality and a deep respect for the materials we work with.
-              </p>
-              <p>
-                Today, we serve global fashion brands, interior designers, and industrial partners in over 50 countries, delivering fabrics that not only meet technical specifications but also inspire creativity.
-              </p>
+            <div class="relative z-10 aspect-[4/5] overflow-hidden bg-gray-200 shadow-2xl">
+              <img
+                v-if="companyImgUrl"
+                :src="companyImgUrl"
+                alt="Company"
+                class="w-full h-full object-cover"
+              />
+              <img
+                v-else
+                src="https://images.unsplash.com/photo-1534643960519-11ad79bc19df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                :alt="t('about.factoryFloorAlt')"
+                class="w-full h-full object-cover"
+              />
             </div>
-            
-            <div class="mt-10 pt-10 border-t border-brand-navy/10">
+            <!-- Decorative -->
+            <div
+              class="absolute -top-10 -left-10 w-40 h-40 bg-brand-gold/10 rounded-full z-0"
+            ></div>
+            <div
+              class="absolute -bottom-10 -right-10 w-full h-full border border-brand-navy/10 z-0"
+            ></div>
+          </div>
+
+          <div class="w-full lg:w-1/2">
+            <h2 class="text-4xl md:text-5xl font-serif font-bold text-brand-navy mb-8">
+              {{ mainTitle }}
+            </h2>
+            <div class="w-20 h-1 bg-brand-gold mb-8"></div>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              {{ mainSubTitle }}
+            </p>
+
+            <!-- <div class="mt-10 pt-10 border-t border-brand-navy/10">
               <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Signature_sample.svg" alt="CEO Signature" class="h-12 opacity-50">
               <p class="text-sm text-gray-400 mt-2">Founder & CEO</p>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -51,76 +74,118 @@
     <!-- Stats Section -->
     <section class="py-24 bg-brand-navy text-white relative overflow-hidden" ref="statsSection">
       <!-- Background Pattern -->
-      <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#C5A059 1px, transparent 1px); background-size: 30px 30px;"></div>
-      
+      <div
+        class="absolute inset-0 opacity-5"
+        style="
+          background-image: radial-gradient(#c5a059 1px, transparent 1px);
+          background-size: 30px 30px;
+        "
+      ></div>
+
       <div class="container mx-auto px-6 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-          <div class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300">
-            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4">{{ yearsExperience }}+</span>
-            <span class="text-sm tracking-widest uppercase text-white/60">Years Experience</span>
+        <div v-if="numsList.length" class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+          <div
+            v-for="(item, idx) in numsList"
+            :key="item.id"
+            class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300"
+          >
+            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4"
+              >{{ animatedNums[idx] }}+</span
+            >
+            <span class="text-sm tracking-widest uppercase text-white/60">{{
+              item.description
+            }}</span>
           </div>
-          <div class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300">
-            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4">{{ exportCountries }}+</span>
-            <span class="text-sm tracking-widest uppercase text-white/60">Export Countries</span>
+        </div>
+        <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+          <div
+            class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300"
+          >
+            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4"
+              >{{ defaultAnimated[0] }}+</span
+            >
+            <span class="text-sm tracking-widest uppercase text-white/60">{{
+              t('about.yearsExperience')
+            }}</span>
           </div>
-          <div class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300">
-            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4">{{ metersPerMonth }}M+</span>
-            <span class="text-sm tracking-widest uppercase text-white/60">Meters / Month</span>
+          <div
+            class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300"
+          >
+            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4"
+              >{{ defaultAnimated[1] }}+</span
+            >
+            <span class="text-sm tracking-widest uppercase text-white/60">{{
+              t('about.exportCountries')
+            }}</span>
+          </div>
+          <div
+            class="p-8 border border-white/10 hover:border-brand-gold/50 transition-colors duration-300"
+          >
+            <span class="block text-6xl font-serif font-bold text-brand-gold mb-4"
+              >{{ defaultAnimated[2] }}M+</span
+            >
+            <span class="text-sm tracking-widest uppercase text-white/60">{{
+              t('about.metersPerMonth')
+            }}</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Factory Tour -->
-    <section class="py-24">
+    <!-- Product Quality Section -->
+    <section class="py-24 md:py-32 bg-white">
       <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-          <span class="text-brand-gold font-bold tracking-widest uppercase text-sm mb-3 block">Infrastructure</span>
-          <h2 class="text-4xl md:text-5xl font-serif font-bold text-brand-navy">Our Facilities</h2>
-        </div>
+        <!-- Section Title -->
+        <h2
+          class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-brand-gold text-center mb-16 md:mb-24"
+        >
+          {{ t('about.qualityGuaranteed') }}
+        </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="group relative aspect-video overflow-hidden cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1565514020176-dbf2277800c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Weaving Workshop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-brand-navy/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span class="text-white font-serif text-2xl font-bold">Weaving Workshop</span>
+        <!-- Sub Main Sections -->
+        <template v-for="(item, index) in subMainList" :key="item.id">
+          <!-- Alternating layout: even = image left, odd = image right -->
+          <div
+            class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 mb-20 md:mb-28"
+            :class="{ 'lg:flex-row-reverse': index % 2 !== 0 }"
+          >
+            <!-- Image with Gold Corner Decoration -->
+            <div class="w-full lg:w-1/2 relative">
+              <div class="relative z-10 overflow-hidden shadow-xl">
+                <img
+                  v-if="item.cardImgUrl"
+                  :src="item.cardImgUrl"
+                  :alt="item.description || ''"
+                  class="w-full h-auto object-cover aspect-[4/3]"
+                />
+              </div>
+              <!-- Gold Corner Accent -->
+              <div
+                v-if="index % 2 === 0"
+                class="absolute -top-4 -left-4 w-24 h-24 border-l-4 border-t-4 border-brand-gold z-0"
+              ></div>
+              <div
+                v-else
+                class="absolute -bottom-4 -right-4 w-24 h-24 border-r-4 border-b-4 border-brand-gold z-0"
+              ></div>
+            </div>
+
+            <!-- Text Content -->
+            <div class="w-full lg:w-1/2">
+              <p class="text-gray-600 text-lg leading-relaxed">
+                {{ item.description }}
+              </p>
             </div>
           </div>
-          
-          <div class="group relative aspect-video overflow-hidden cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dyeing Lab" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-brand-navy/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span class="text-white font-serif text-2xl font-bold">Dyeing Lab</span>
-            </div>
-          </div>
-          
-          <div class="group relative aspect-video overflow-hidden cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Warehouse" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-brand-navy/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span class="text-white font-serif text-2xl font-bold">Global Warehouse</span>
-            </div>
-          </div>
-          
-          <div class="group relative aspect-video overflow-hidden cursor-pointer">
-             <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Design Office" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-brand-navy/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span class="text-white font-serif text-2xl font-bold">Design Studio</span>
-            </div>
-          </div>
-          
-          <div class="group relative aspect-video overflow-hidden cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Quality Control" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-brand-navy/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span class="text-white font-serif text-2xl font-bold">Quality Control</span>
-            </div>
-          </div>
-          
-          <div class="group relative aspect-video overflow-hidden cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Showroom" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-brand-navy/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span class="text-white font-serif text-2xl font-bold">Showroom</span>
-            </div>
-          </div>
+        </template>
+
+        <!-- Bottom Slogan -->
+        <div class="text-center pt-12 border-t border-brand-gold/20">
+          <p
+            class="text-xl md:text-2xl lg:text-3xl font-bold text-brand-gold leading-relaxed tracking-wide"
+          >
+            {{ t('about.slogan') }}
+          </p>
         </div>
       </div>
     </section>
@@ -128,12 +193,58 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, type Ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted, type Ref } from 'vue'
+import { getAboutData, type AboutData } from '@/api/about'
 
+const { t } = useI18n()
+const config = useRuntimeConfig()
+const baseUrl = config.public.base || ''
+
+const getFullUrl = (url: string | null | undefined) => {
+  if (!url) return ''
+  return url.startsWith('http') ? url : `${baseUrl}${url}`
+}
+
+// Fetch about page data
+const { data: aboutResponse } = await getAboutData({
+  transform: (response: any) => response,
+})
+
+const aboutData = computed<AboutData | null>(() => {
+  return aboutResponse.value?.data || null
+})
+
+// Banner
+const bannerBgUrl = computed(() => {
+  const bg = aboutData.value?.banner?.background
+  return bg?.url ? getFullUrl(bg.url) : null
+})
+
+// Main section
+const mainTitle = computed(() => aboutData.value?.main?.title || t('about.whoWeAre'))
+const mainSubTitle = computed(() => aboutData.value?.main?.subTitle || '')
+const companyImgUrl = computed(() => {
+  const imgs = aboutData.value?.main?.companyImgs
+  if (imgs && imgs.length > 0 && imgs[0]?.url) {
+    return getFullUrl(imgs[0].url)
+  }
+  return null
+})
+
+// Sub main sections
+const subMainList = computed(() => {
+  const items = aboutData.value?.subMain
+  if (!items?.length) return []
+  return items.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    cardImgUrl: item.cardImg?.url ? getFullUrl(item.cardImg.url) : null,
+  }))
+})
+
+// NumsList with animation
 const statsSection = ref<HTMLElement | null>(null)
-const yearsExperience = ref(0)
-const exportCountries = ref(0)
-const metersPerMonth = ref(0)
 let observer: IntersectionObserver | null = null
 
 const animateValue = (refValue: Ref<number>, start: number, end: number, duration: number) => {
@@ -141,7 +252,6 @@ const animateValue = (refValue: Ref<number>, start: number, end: number, duratio
   const step = (timestamp: number) => {
     if (!startTimestamp) startTimestamp = timestamp
     const progress = Math.min((timestamp - startTimestamp) / duration, 1)
-    // Ease out quart
     const easeProgress = 1 - Math.pow(1 - progress, 4)
     refValue.value = Math.floor(easeProgress * (end - start) + start)
     if (progress < 1) {
@@ -151,17 +261,48 @@ const animateValue = (refValue: Ref<number>, start: number, end: number, duratio
   window.requestAnimationFrame(step)
 }
 
+const numsList = computed(() => aboutData.value?.numsList || [])
+
+// Reactive animated values for API numsList
+const animatedNums = ref<number[]>([])
+
+// Default fallback animated values
+const defaultAnimated = ref([0, 0, 0])
+
 onMounted(() => {
-  observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animateValue(yearsExperience, 0, 25, 2000)
-        animateValue(exportCountries, 0, 50, 2000)
-        animateValue(metersPerMonth, 0, 1, 2000)
-        observer?.disconnect()
-      }
-    })
-  }, { threshold: 0.2 })
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (numsList.value.length) {
+            animatedNums.value = numsList.value.map(() => 0)
+            numsList.value.forEach((item, idx) => {
+              const r = ref(0)
+              animateValue(r, 0, item.mainNum, 2000)
+              const syncStep = () => {
+                animatedNums.value[idx] = r.value
+                if (r.value < item.mainNum) requestAnimationFrame(syncStep)
+              }
+              requestAnimationFrame(syncStep)
+            })
+          } else {
+            const targets = [25, 50, 1]
+            targets.forEach((target, idx) => {
+              const r = ref(0)
+              animateValue(r, 0, target, 2000)
+              const syncStep = () => {
+                defaultAnimated.value[idx] = r.value
+                if (r.value < target) requestAnimationFrame(syncStep)
+              }
+              requestAnimationFrame(syncStep)
+            })
+          }
+          observer?.disconnect()
+        }
+      })
+    },
+    { threshold: 0.2 },
+  )
 
   if (statsSection.value) {
     observer.observe(statsSection.value)

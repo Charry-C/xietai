@@ -1,20 +1,38 @@
 <template>
   <div class="min-h-screen bg-brand-cream">
     <!-- Page Header -->
-    <div class="bg-brand-navy text-white pt-32 pb-16 relative overflow-hidden">
+    <section class="bg-brand-navy text-white pt-32 pb-20 relative overflow-hidden">
+      <div v-if="bannerBgUrl" class="absolute inset-0">
+        <img
+          :src="bannerBgUrl"
+          class="w-full h-full object-cover opacity-20"
+          :alt="t('hero.banner')"
+        />
+      </div>
       <div
+        v-else
         class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1620799140408-ed5341cd2431?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center opacity-20"
       ></div>
       <div class="container mx-auto px-6 relative z-10 text-center">
-        <h1 class="text-4xl md:text-6xl font-serif font-bold mb-4">
-          Our Collections
+        <span
+          class="inline-block text-brand-gold text-xs font-bold tracking-[0.3em] uppercase mb-6 animate-fade-in-up"
+          >{{ t('hero.productsTagline') }}</span
+        >
+        <h1
+          class="text-4xl md:text-6xl font-serif font-bold mb-6 animate-fade-in-up animation-delay-100"
+        >
+          {{ bannerTitle }}
         </h1>
-        <p class="text-lg text-white/60 max-w-2xl mx-auto">
-          Explore our range of premium textiles, crafted for excellence and
-          designed for distinction.
+        <p
+          class="text-xl text-white/60 max-w-2xl mx-auto font-light animate-fade-in-up animation-delay-200"
+        >
+          {{ bannerSubTitle }}
         </p>
+        <div
+          class="w-16 h-0.5 bg-brand-gold mx-auto mt-8 animate-fade-in-up animation-delay-300"
+        ></div>
       </div>
-    </div>
+    </section>
 
     <div class="container mx-auto px-6 py-12">
       <!-- Categories Filter -->
@@ -28,7 +46,7 @@
               : 'bg-transparent border-brand-navy/20 text-brand-navy hover:border-brand-gold hover:text-brand-gold'
           "
         >
-          All Collections
+          {{ t('common.allCollections') }}
         </button>
         <button
           v-for="c in categories"
@@ -41,7 +59,7 @@
               : 'bg-transparent border-brand-navy/20 text-brand-navy hover:border-brand-gold hover:text-brand-gold'
           "
         >
-          {{ c.attributes?.name || c.name || "Category" }}
+          {{ c.attributes?.name || c.name || t('common.category') }}
         </button>
       </div>
 
@@ -68,7 +86,7 @@
               />
             </svg>
           </template>
-          Filter
+          {{ t('common.filter') }}
         </el-button>
 
         <span
@@ -90,7 +108,7 @@
           <div>
             <div class="flex justify-center items-center mb-6">
               <h3 class="text-xl font-serif font-bold text-brand-navy">
-                Select Category
+                {{ t('common.selectCategory') }}
               </h3>
             </div>
 
@@ -104,7 +122,7 @@
                     : 'text-gray-600 hover:bg-gray-50'
                 "
               >
-                All Collections
+                {{ t('common.allCollections') }}
                 <svg
                   v-if="activeCategory === null"
                   xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +149,7 @@
                     : 'text-gray-600 hover:bg-gray-50'
                 "
               >
-                {{ c.attributes?.name || c.name || "Category" }}
+                {{ c.attributes?.name || c.name || t('common.category') }}
                 <svg
                   v-if="activeCategory === c.id"
                   xmlns="http://www.w3.org/2000/svg"
@@ -173,7 +191,7 @@
           <NuxtLink
             v-for="(p, index) in products"
             :key="p.id"
-            :to="`/products/${p.documentId}`"
+            :to="localePath(`/products/${p.documentId}`)"
             class="group cursor-pointer block min-w-0"
             :style="{ animationDelay: `${index * 50}ms` }"
           >
@@ -194,7 +212,7 @@
                 <span
                   class="bg-white text-brand-navy px-6 py-3 font-bold text-sm tracking-widest uppercase transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
                 >
-                  View Details
+                  {{ t('common.viewDetails') }}
                 </span>
               </div>
 
@@ -203,19 +221,13 @@
                 v-if="index < 2"
                 class="absolute top-4 left-4 bg-brand-gold text-white text-xs font-bold px-3 py-1 uppercase tracking-wider"
               >
-                New
+                {{ t('common.new') }}
               </div>
             </div>
 
-            <div
-              class="text-center group-hover:-translate-y-1 transition-transform duration-300"
-            >
-              <span
-                class="text-xs text-gray-500 uppercase tracking-widest mb-2 block"
-              >
-                {{
-                  p.attributes?.category?.data?.attributes?.name || "Textile"
-                }}
+            <div class="text-center group-hover:-translate-y-1 transition-transform duration-300">
+              <span class="text-xs text-gray-500 uppercase tracking-widest mb-2 block">
+                {{ p.attributes?.category?.data?.attributes?.name || t('common.textile') }}
               </span>
               <h3
                 class="text-base md:text-xl font-serif font-bold text-brand-navy mb-2 group-hover:text-brand-gold transition-colors"
@@ -224,9 +236,7 @@
               </h3>
               <p class="md:text-sm text-gray-500 text-sm line-clamp-2 px-4">
                 {{
-                  p.attributes?.description ||
-                  p.description ||
-                  "High-quality fabric suitable for various applications."
+                  p.attributes?.description || p.description || t('products.descriptionFallback')
                 }}
               </p>
             </div>
@@ -234,9 +244,7 @@
         </div>
         <!-- Empty State -->
         <div v-else class="text-center py-20">
-          <div
-            class="inline-block p-6 rounded-full bg-gray-100 mb-4 text-gray-400"
-          >
+          <div class="inline-block p-6 rounded-full bg-gray-100 mb-4 text-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-10 w-10"
@@ -253,10 +261,10 @@
             </svg>
           </div>
           <h3 class="text-xl font-serif font-bold text-brand-navy mb-2">
-            No products found
+            {{ t('products.noProductsFound') }}
           </h3>
           <p class="text-gray-500">
-            Try selecting a different category or check back later.
+            {{ t('products.tryDifferentCategory') }}
           </p>
         </div>
       </client-only>
@@ -278,94 +286,118 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
-import { getProducts } from "@/api/product";
-import { strapiFetch } from "@/composables/useStrapiFetch";
+import { ref, computed, watch, onMounted } from 'vue'
+import { getProducts, getProductPage, type ProductPageData } from '@/api/product'
+import { strapiFetch } from '@/composables/useStrapiFetch'
 
-const loading = ref(true);
-const currentPage = ref(1);
-const pageSize = ref(6);
-const total = ref(0);
-const categories = ref<any[]>([]);
-const activeCategory = ref<number | string | null>(null);
-const products = ref<any[]>([]);
+const config = useRuntimeConfig()
+const baseUrl = config.public.base || ''
+const { t } = useI18n()
+const localePath = useLocalePath()
+const getFullUrl = (url: string) => {
+  if (!url) return ''
+  return url.startsWith('http') ? url : `${baseUrl}${url}`
+}
 
-const showFilterModal = ref(false);
+// Fetch product page data (banner)
+const { data: productPageResponse } = await getProductPage()
+const productPageData = computed<ProductPageData | null>(() => {
+  return productPageResponse.value?.data || null
+})
+
+const bannerTitle = computed(
+  () => productPageData.value?.banner?.title || t('products.bannerTitleFallback'),
+)
+const bannerSubTitle = computed(
+  () => productPageData.value?.banner?.subTitle || t('products.bannerSubtitleFallback'),
+)
+const bannerBgUrl = computed(() => {
+  const bg = productPageData.value?.banner?.background
+  return bg?.url ? getFullUrl(bg.url) : null
+})
+
+const loading = ref(true)
+const currentPage = ref(1)
+const pageSize = ref(6)
+const total = ref(0)
+const categories = ref<any[]>([])
+const activeCategory = ref<number | string | null>(null)
+const products = ref<any[]>([])
+
+const showFilterModal = ref(false)
 
 const currentCategoryName = computed(() => {
-  if (activeCategory.value === null) return "All Collections";
-  const category = categories.value.find(
-    (c: any) => c.id === activeCategory.value,
-  );
-  return category?.attributes?.name || category?.name || "Category";
-});
+  if (activeCategory.value === null) return t('common.allCollections')
+  const category = categories.value.find((c: any) => c.id === activeCategory.value)
+  return category?.attributes?.name || category?.name || t('common.category')
+})
 
 // Fetch Categories
 const fetchCategories = async () => {
   try {
-    const { data } = await strapiFetch.get<any>("/categories", {
+    const { data } = await strapiFetch.get<any>('/categories', {
       query: {
-        sort: "id:asc",
-        "pagination[pageSize]": 100,
+        sort: 'id:asc',
+        'pagination[pageSize]': 100,
       },
-    });
-    categories.value = data.value?.data || [];
+    })
+    categories.value = data.value?.data || []
 
     // Default to first category if available, or keep null for "All"
     // activeCategory.value = categories.value[0]?.id ?? null
     // Let's default to null (All) for better UX unless specified otherwise
   } catch (e) {
-    console.error("Error fetching categories:", e);
+    console.error('Error fetching categories:', e)
   }
-};
+}
 
 // Fetch Products
 const fetchProducts = async () => {
-  loading.value = true;
+  loading.value = true
   try {
     const query: Record<string, any> = {
-      "pagination[page]": currentPage.value,
-      "pagination[pageSize]": pageSize.value,
-      populate: "*",
-    };
+      'pagination[page]': currentPage.value,
+      'pagination[pageSize]': pageSize.value,
+      populate: '*',
+    }
 
     if (activeCategory.value) {
-      query["filters[category][id][$eq]"] = activeCategory.value;
+      query['filters[category][id][$eq]'] = activeCategory.value
     }
 
-    const { data } = await getProducts<any>({ query });
-    const list = data.value?.data ?? [];
+    const { data } = await getProducts<any>({ query })
+    const list = data.value?.data ?? []
     products.value = list.map((item: any) => ({
       ...item,
-      url: getStrapiImage(item.image, "large"),
-    }));
+      url: getStrapiImage(item.image, 'large'),
+    }))
 
-    total.value = data.value?.meta?.pagination?.total ?? 0;
+    total.value = data.value?.meta?.pagination?.total ?? 0
   } catch (e) {
-    console.error("Error fetching products:", e);
+    console.error('Error fetching products:', e)
   } finally {
-    loading.value = false;
+    loading.value = false
     // Scroll to top of grid
     if (process.client) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
-};
+}
 
 const selectCategory = (id: number | string | null) => {
-  showFilterModal.value = false;
-  if (activeCategory.value === id) return;
-  activeCategory.value = id;
-  currentPage.value = 1;
-  fetchProducts();
-};
+  showFilterModal.value = false
+  if (activeCategory.value === id) return
+  activeCategory.value = id
+  currentPage.value = 1
+  fetchProducts()
+}
 
 const handlePageChange = (page: number) => {
-  currentPage.value = page;
-  fetchProducts();
-};
+  currentPage.value = page
+  fetchProducts()
+}
 
-await Promise.all([fetchCategories(), fetchProducts()]);
+await Promise.all([fetchCategories(), fetchProducts()])
 </script>
 
 <style lang="less" scoped>
@@ -408,5 +440,30 @@ await Promise.all([fetchCategories(), fetchProducts()]);
   &:deep(.el-icon) {
     margin: 10px !important;
   }
+}
+
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
 }
 </style>
