@@ -139,6 +139,27 @@
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
   },
+  "seo": {
+    "defaultDescription": "China textile manufacturer & fabric exporter. B2B wholesale fabric supplier for global apparel brands. OEM/ODM custom fabric production with competitive factory prices.",
+    "homeTitle": "Xietai Textile - China Fabric Manufacturer & B2B Exporter",
+    "homeDescription": "Xietai Textile - China textile manufacturer & fabric exporter since 1998. B2B wholesale fabric supplier for global apparel brands. OEM/ODM custom fabric production with competitive factory direct prices.",
+    "aboutTitle": "About Us - China Textile Factory | 25+ Years Export Experience",
+    "aboutDescription": "Xietai Textile - China fabric factory with 25+ years export experience. B2B textile manufacturer serving 50+ countries. OEM/ODM custom fabric production for global apparel brands.",
+    "productsTitle": "Fabric Catalog - Wholesale Textile Products | B2B Bulk Order",
+    "productsDescription": "Wholesale fabric catalog from China textile factory. B2B bulk fabric orders for cotton, polyester, woven & knitted fabrics. Competitive export prices for apparel manufacturers.",
+    "productDetailTitle": "{name} - Wholesale Fabric | China Textile Factory",
+    "productDetailDescription": "{name} wholesale from China textile factory. B2B bulk order with competitive export prices. OEM/ODM custom production available for global apparel brands.",
+    "servicesTitle": "B2B Textile Services - OEM/ODM Manufacturing Solutions",
+    "servicesDescription": "B2B textile services from China fabric factory. OEM/ODM custom production, private label manufacturing, quality inspection, and global shipping. One-stop textile sourcing solution.",
+    "contactTitle": "Get Quote - B2B Fabric Inquiry | China Textile Factory",
+    "contactDescription": "Request fabric quotes from China textile factory. B2B inquiry for bulk orders, OEM/ODM production. Fast response within 24 hours. Export to worldwide markets."
+  },
+  "error": {
+    "pageNotFound": "Page Not Found",
+    "pageNotFoundDescription": "Sorry, the page you are looking for doesn't exist or has been moved. Please check the URL or navigate back to our homepage.",
+    "backToHome": "Back to Home",
+    "browseProducts": "Browse Products"
+  },
   "specs": {
     "material": "Material",
     "pattern": "Pattern",

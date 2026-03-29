@@ -139,6 +139,27 @@
     "privacyPolicy": "隐私政策",
     "termsOfService": "服务条款"
   },
+  "seo": {
+    "defaultDescription": "中国纺织面料生产厂家与出口商。B2B批发面料供应商，服务全球服装品牌。OEM/ODM定制生产，工厂直销价格。",
+    "homeTitle": "协泰纺织 - 中国面料生产厂家 | B2B外贸出口",
+    "homeDescription": "协泰纺织 - 中国纺织面料生产厂家与出口商，始于1998年。B2B批发面料供应商，服务全球服装品牌。OEM/ODM定制生产，工厂直销价格。",
+    "aboutTitle": "关于我们 - 中国纺织工厂 | 25年外贸出口经验",
+    "aboutDescription": "协泰纺织 - 中国面料工厂，25年外贸出口经验。B2B纺织厂家，出口50+国家。为全球服装品牌提供OEM/ODM定制面料生产。",
+    "productsTitle": "面料产品目录 - 批发纺织面料 | B2B大宗采购",
+    "productsDescription": "中国纺织工厂批发面料目录。B2B大宗面料采购，棉布、涤纶、梭织、针织面料。外贸出口价格优惠，服务服装制造商。",
+    "productDetailTitle": "{name} - 批发面料 | 中国纺织工厂",
+    "productDetailDescription": "{name}批发采购，中国纺织工厂直供。B2B大宗订单，外贸出口价格。为全球服装品牌提供OEM/ODM定制生产。",
+    "servicesTitle": "B2B纺织服务 - OEM/ODM定制生产方案",
+    "servicesDescription": "中国面料工厂B2B纺织服务。OEM/ODM定制生产、贴牌加工、质量检验、全球物流。一站式面料采购解决方案。",
+    "contactTitle": "获取报价 - B2B面料询盘 | 中国纺织工厂",
+    "contactDescription": "向中国纺织工厂询价面料。B2B大宗订单询盘、OEM/ODM生产咨询。24小时快速回复，出口全球市场。"
+  },
+  "error": {
+    "pageNotFound": "页面未找到",
+    "pageNotFoundDescription": "抱歉，您访问的页面不存在或已被移动。请检查网址或返回首页。",
+    "backToHome": "返回首页",
+    "browseProducts": "浏览产品"
+  },
   "specs": {
     "material": "材质",
     "pattern": "花型",

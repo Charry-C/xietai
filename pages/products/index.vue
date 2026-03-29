@@ -288,6 +288,31 @@ import { fetchProductsApi, getProductPage, type ProductPageData } from '@/api/pr
 import { strapiRequest } from '@/composables/useStrapiFetch'
 import { useLocale } from '@/composables/useLocale'
 
+// SEO 配置 - 产品目录（外贸批发）
+useSeo({
+  title: 'Fabric Catalog - Wholesale Textile Products',
+  description:
+    'Wholesale fabric catalog from China textile factory. B2B bulk fabric orders for cotton, polyester, woven & knitted fabrics. Competitive export prices for apparel manufacturers.',
+  keywords: [
+    'wholesale fabric catalog',
+    'bulk fabric order',
+    'fabric wholesale China',
+    'textile product list',
+    'B2B fabric pricing',
+    'fabric export catalog',
+    'apparel fabric wholesale',
+    'textile manufacturer products',
+    'fabric MOQ wholesale',
+  ],
+  image: '/og-image.png',
+})
+
+// 结构化数据 - BreadcrumbList
+useJsonLd({
+  type: 'BreadcrumbList',
+  items: [{ name: 'Products', url: '/products' }],
+})
+
 const config = useRuntimeConfig()
 const baseUrl = config.public.base || ''
 const { t } = useI18n()

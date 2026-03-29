@@ -176,6 +176,26 @@
 import { getServiceData, type ServiceData } from '@/api/service'
 import { computed } from 'vue'
 
+// SEO 配置 - 服务（外贸B2B）
+useSeo({
+  title: 'Our Services - B2B Textile Solutions',
+  description:
+    'B2B textile services from China fabric factory. OEM/ODM custom production, private label manufacturing, quality inspection, and global shipping. One-stop textile sourcing solution.',
+  keywords: [
+    'OEM textile manufacturing',
+    'ODM fabric production',
+    'private label fabric',
+    'custom textile manufacturing',
+    'fabric sourcing service',
+    'textile quality inspection',
+    'bulk fabric production',
+    'textile export service',
+    'B2B textile solutions',
+    'fabric development China',
+  ],
+  image: '/og-image.png',
+})
+
 const { t } = useI18n()
 const config = useRuntimeConfig()
 const baseUrl = config.public.base || ''

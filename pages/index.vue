@@ -491,6 +491,42 @@
 import { getHomeData, type HomeData, type MediaFile } from '@/api/home'
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 
+// SEO 配置 - 外贸B2B首页
+useSeo({
+  title: '',
+  description:
+    'Xietai Textile - China textile manufacturer & fabric exporter since 1998. B2B wholesale fabric supplier for global apparel brands. OEM/ODM custom fabric production with competitive factory direct prices.',
+  keywords: [
+    'China textile exporter',
+    'B2B fabric supplier',
+    'wholesale fabric manufacturer',
+    'fabric factory China',
+    'textile export company',
+    'bulk fabric order',
+    'OEM textile manufacturer',
+    'fabric sourcing China',
+    'apparel fabric wholesale',
+    'textile trading company',
+  ],
+  image: '/og-image.png',
+})
+
+// 结构化数据 - Organization (外贸公司)
+useJsonLd({
+  type: 'Organization',
+  name: 'Xietai Textile',
+  description: 'China textile manufacturer & B2B fabric exporter for global apparel industry',
+  sameAs: [],
+})
+
+// 结构化数据 - WebSite
+useJsonLd({
+  type: 'WebSite',
+  name: 'Xietai Textile',
+  description:
+    'China textile manufacturer & fabric exporter. B2B wholesale fabric supplier for global apparel brands.',
+})
+
 const { t } = useI18n()
 const config = useRuntimeConfig()
 const localePath = useLocalePath()

@@ -270,6 +270,33 @@ import SelectedProductCards from '@/components/SelectedProductCards.vue'
 import type { ProductOption } from '@/components/ProductSelector.vue'
 import { computed, ref, onMounted } from 'vue'
 
+// SEO 配置 - 联系我们（外贸询盘）
+useSeo({
+  title: 'Contact Us - Get Factory Quote',
+  description:
+    'Request fabric quotes from China textile factory. B2B inquiry for bulk orders, OEM/ODM production. Fast response within 24 hours. Export to worldwide markets.',
+  keywords: [
+    'fabric quote request',
+    'textile inquiry China',
+    'bulk fabric inquiry',
+    'B2B fabric contact',
+    'wholesale fabric quote',
+    'textile factory contact',
+    'fabric MOQ inquiry',
+    'textile export inquiry',
+    'fabric sample request',
+    'OEM textile quotation',
+  ],
+  image: '/og-image.png',
+})
+
+// 结构化数据 - ContactPage
+useJsonLd({
+  type: 'Organization',
+  name: 'Xietai Textile',
+  description: 'China textile factory - Contact for B2B fabric inquiries and wholesale quotes',
+})
+
 const { t } = useI18n()
 
 // 处理产品询价信息

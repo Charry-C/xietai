@@ -196,6 +196,32 @@
 import { ref, computed, onMounted, onUnmounted, type Ref } from 'vue'
 import { getAboutData, type AboutData } from '@/api/about'
 
+// SEO 配置 - 关于我们（外贸）
+useSeo({
+  title: 'About Us - China Textile Factory',
+  description:
+    'Xietai Textile - China fabric factory with 25+ years export experience. B2B textile manufacturer serving 50+ countries. OEM/ODM custom fabric production for global apparel brands.',
+  keywords: [
+    'China textile factory',
+    'fabric manufacturer China',
+    'textile export experience',
+    'B2B fabric supplier',
+    'OEM textile China',
+    'fabric factory tour',
+    'textile production capacity',
+    'fabric export countries',
+  ],
+  image: '/og-image.png',
+})
+
+// 结构化数据 - Organization (详细版)
+useJsonLd({
+  type: 'Organization',
+  name: 'Xietai Textile',
+  description:
+    'China textile manufacturer & B2B fabric exporter with 25+ years global export experience',
+})
+
 const { t } = useI18n()
 const config = useRuntimeConfig()
 const baseUrl = config.public.base || ''

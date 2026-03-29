@@ -230,6 +230,36 @@ import { useRoute, useRouter } from 'vue-router'
 import { getProduct } from '@/api/product'
 import { getStrapiImage } from '@/utils/index'
 
+// SEO 配置 - 产品详情（外贸B2B）
+const productForSeo = ref<{ name: string; description: string } | null>(null)
+
+// 动态SEO - 根据产品信息更新
+watch(
+  productForSeo,
+  (product) => {
+    if (product) {
+      useSeo({
+        title: `${product.name} - Wholesale Fabric`,
+        description:
+          product.description ||
+          `${product.name} wholesale from China textile factory. B2B bulk order with competitive export prices. OEM/ODM custom production available.`,
+        keywords: [
+          `${product.name} wholesale`,
+          `${product.name} China`,
+          `${product.name} manufacturer`,
+          'bulk fabric order',
+          'fabric export China',
+          'B2B textile supplier',
+          'wholesale textile price',
+          'fabric MOQ',
+        ],
+        type: 'product',
+      })
+    }
+  },
+  { immediate: true },
+)
+
 const route = useRoute()
 const router = useRouter()
 const localePath = useLocalePath()
