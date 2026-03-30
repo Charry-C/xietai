@@ -3,10 +3,14 @@
     <!-- Page Header -->
     <section class="bg-brand-navy text-white pt-32 pb-20 relative overflow-hidden">
       <div v-if="bannerBgUrl" class="absolute inset-0">
-        <img
+        <NuxtImg
           :src="bannerBgUrl"
           class="w-full h-full object-cover opacity-20"
           :alt="t('hero.banner')"
+          format="webp"
+          quality="80"
+          loading="eager"
+          preload
         />
       </div>
       <div
@@ -199,10 +203,14 @@
               class="relative aspect-[3/4] overflow-hidden bg-gray-100 mb-6 shadow-sm group-hover:shadow-xl transition-shadow duration-500"
             >
               <!-- Image -->
-              <img
+              <NuxtImg
                 :src="p.attributes?.url || p.url"
                 :alt="p.attributes?.name || p.name"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                format="webp"
+                quality="85"
+                loading="lazy"
+                preset="product"
               />
 
               <!-- Overlay Action -->

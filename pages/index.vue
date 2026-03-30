@@ -16,17 +16,29 @@
             playsinline
             class="w-full h-full object-cover opacity-40"
           ></video>
-          <img
+          <NuxtImg
             v-else
             :src="heroBackgroundUrl"
             class="w-full h-full object-cover opacity-40"
             alt="Hero Background"
+            format="webp"
+            quality="80"
+            loading="eager"
+            fetchpriority="high"
+            preload
           />
         </template>
-        <div
+        <NuxtImg
           v-else
-          class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-40"
-        ></div>
+          src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+          class="w-full h-full object-cover opacity-40"
+          alt="Hero Background"
+          format="webp"
+          quality="80"
+          loading="eager"
+          fetchpriority="high"
+          preload
+        />
       </div>
       <div
         class="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-transparent opacity-80"
@@ -114,11 +126,15 @@
             :key="product.id"
             class="group relative aspect-[3/4] bg-gray-800 overflow-hidden cursor-pointer"
           >
-            <img
+            <NuxtImg
               v-if="product.image"
               :src="product.image"
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
               :alt="product.title"
+              format="webp"
+              quality="80"
+              loading="lazy"
+              preset="card"
             />
             <div v-else class="w-full h-full bg-gray-700"></div>
             <div
@@ -166,7 +182,15 @@
           playsinline
           class="w-full h-full object-cover"
         ></video>
-        <img v-else :src="servicesBackgroundUrl" class="w-full h-full object-cover" alt="" />
+        <NuxtImg
+          v-else
+          :src="servicesBackgroundUrl"
+          class="w-full h-full object-cover"
+          alt=""
+          format="webp"
+          quality="60"
+          loading="lazy"
+        />
       </div>
 
       <div class="container mx-auto px-4 sm:px-6 relative z-20">
@@ -189,11 +213,14 @@
               :poster="serviceVideoPoster"
               :title="homeData?.servicesArea?.title || t('home.servicesReel')"
             />
-            <img
+            <NuxtImg
               v-else-if="serviceVideoPoster"
               :src="serviceVideoPoster"
               class="w-full h-full object-cover"
               :alt="t('nav.services')"
+              format="webp"
+              quality="80"
+              loading="lazy"
             />
             <div v-else class="w-full h-full bg-brand-navy"></div>
           </div>
@@ -223,11 +250,14 @@
             <div
               class="w-12 h-12 md:w-14 md:h-14 bg-brand-gold/10 text-brand-gold flex items-center justify-center rounded-full mb-6 md:mb-8 group-hover:bg-white/10 group-hover:text-white transition-colors overflow-hidden"
             >
-              <img
+              <NuxtImg
                 v-if="service.iconUrl"
                 :src="service.iconUrl"
                 class="w-full h-full object-contain"
                 alt=""
+                format="webp"
+                quality="80"
+                loading="lazy"
               />
             </div>
             <h3
@@ -289,10 +319,14 @@
               >
                 <!-- Image Header -->
                 <div class="h-64 w-full overflow-hidden">
-                  <img
+                  <NuxtImg
                     :src="advantage.image"
                     :alt="advantage.title"
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    format="webp"
+                    quality="80"
+                    loading="lazy"
+                    preset="card"
                   />
                 </div>
 
@@ -304,11 +338,14 @@
                   <div
                     class="absolute inset-1.5 border-[1.5px] border-white/60 border-dashed rounded-full"
                   ></div>
-                  <img
+                  <NuxtImg
                     v-if="advantage.iconUrl"
                     :src="advantage.iconUrl"
                     class="relative z-10 w-full h-full object-contain"
                     alt=""
+                    format="webp"
+                    quality="80"
+                    loading="lazy"
                   />
                 </div>
 
@@ -384,7 +421,15 @@
           playsinline
           class="w-full h-full object-cover"
         ></video>
-        <img v-else :src="aboutBackgroundUrl" class="w-full h-full object-cover" alt="" />
+        <NuxtImg
+          v-else
+          :src="aboutBackgroundUrl"
+          class="w-full h-full object-cover"
+          alt=""
+          format="webp"
+          quality="60"
+          loading="lazy"
+        />
       </div>
       <div class="container mx-auto px-4 sm:px-6 relative z-10">
         <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
@@ -400,18 +445,25 @@
                   playsinline
                   class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 ></video>
-                <img
+                <NuxtImg
                   v-else
                   :src="getFullUrl(aboutPrimaryMedia.url)"
                   :alt="aboutPrimaryMedia.alternativeText || t('home.aboutAlt')"
                   class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                  format="webp"
+                  quality="85"
+                  loading="lazy"
+                  preset="product"
                 />
               </template>
-              <img
+              <NuxtImg
                 v-else
                 src="https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
                 :alt="t('home.fabricTextureAlt')"
                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                format="webp"
+                quality="85"
+                loading="lazy"
               />
             </div>
             <!-- Decorative Element -->
@@ -495,7 +547,7 @@ import { computed, ref, onMounted, onUnmounted } from 'vue'
 useSeo({
   title: '',
   description:
-    'Xietai Textile - China textile manufacturer & fabric exporter since 1998. B2B wholesale fabric supplier for global apparel brands. OEM/ODM custom fabric production with competitive factory direct prices.',
+    'Xietai Textile - China textile manufacturer & fabric exporter since 2024. B2B wholesale fabric supplier for global apparel brands. OEM/ODM custom fabric production with competitive factory direct prices.',
   keywords: [
     'China textile exporter',
     'B2B fabric supplier',

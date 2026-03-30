@@ -3,7 +3,15 @@
     <!-- Hero Section -->
     <section class="relative py-32 md:py-48 overflow-hidden bg-brand-navy text-white">
       <div v-if="bannerBgUrl" class="absolute inset-0">
-        <img :src="bannerBgUrl" class="w-full h-full object-cover opacity-30" alt="Banner" />
+        <NuxtImg
+          :src="bannerBgUrl"
+          class="w-full h-full object-cover opacity-30"
+          alt="Banner"
+          format="webp"
+          quality="80"
+          loading="eager"
+          preload
+        />
       </div>
       <div
         v-else
@@ -31,17 +39,25 @@
         <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           <div class="w-full lg:w-1/2 relative">
             <div class="relative z-10 aspect-[4/5] overflow-hidden bg-gray-200 shadow-2xl">
-              <img
+              <NuxtImg
                 v-if="companyImgUrl"
                 :src="companyImgUrl"
                 alt="Company"
                 class="w-full h-full object-cover"
+                format="webp"
+                quality="85"
+                loading="lazy"
+                preset="product"
               />
-              <img
+              <NuxtImg
                 v-else
                 src="https://images.unsplash.com/photo-1534643960519-11ad79bc19df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
                 :alt="t('about.factoryFloorAlt')"
                 class="w-full h-full object-cover"
+                format="webp"
+                quality="85"
+                loading="lazy"
+                preset="product"
               />
             </div>
             <!-- Decorative -->
@@ -152,11 +168,15 @@
             <!-- Image with Gold Corner Decoration -->
             <div class="w-full lg:w-1/2 relative">
               <div class="relative z-10 overflow-hidden shadow-xl">
-                <img
+                <NuxtImg
                   v-if="item.cardImgUrl"
                   :src="item.cardImgUrl"
                   :alt="item.description || ''"
                   class="w-full h-auto object-cover aspect-[4/3]"
+                  format="webp"
+                  quality="85"
+                  loading="lazy"
+                  preset="product"
                 />
               </div>
               <!-- Gold Corner Accent -->

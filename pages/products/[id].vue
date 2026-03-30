@@ -73,10 +73,14 @@
         <div class="space-y-4">
           <!-- Main Image -->
           <div class="relative aspect-square bg-white overflow-hidden shadow-sm group">
-            <img
+            <NuxtImg
               :src="activeImage"
               :alt="product.name"
               class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              format="webp"
+              quality="85"
+              loading="eager"
+              preset="product"
             />
           </div>
 
@@ -128,10 +132,14 @@
                       : 'border-transparent hover:border-brand-navy/20'
                   "
                 >
-                  <img
+                  <NuxtImg
                     :src="img"
                     class="w-full h-full object-cover"
                     :alt="$t('products.viewN', { n: idx + 1 })"
+                    format="webp"
+                    quality="75"
+                    loading="lazy"
+                    preset="thumbnail"
                   />
                   <div
                     v-if="activeImage === img"

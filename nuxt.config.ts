@@ -74,7 +74,63 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxtjs/robots', '@nuxtjs/sitemap'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/i18n',
+    '@nuxtjs/robots',
+    '@nuxtjs/sitemap',
+    '@nuxt/image',
+  ],
+
+  // @nuxt/image 图片优化配置
+  image: {
+    // 外部图片源配置 (Strapi API + 其他)
+    domains: ['images.unsplash.com', 'localhost', '127.0.0.1', 'api.charryc.fun'],
+    // 图片格式优化
+    format: ['webp', 'avif'],
+    // 图片质量
+    quality: 80,
+    // 响应式图片断点
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
+    },
+    // 预设尺寸
+    presets: {
+      hero: {
+        modifiers: {
+          format: 'webp',
+          quality: 80,
+          width: 1920,
+        },
+      },
+      product: {
+        modifiers: {
+          format: 'webp',
+          quality: 85,
+          width: 800,
+        },
+      },
+      thumbnail: {
+        modifiers: {
+          format: 'webp',
+          quality: 75,
+          width: 200,
+        },
+      },
+      card: {
+        modifiers: {
+          format: 'webp',
+          quality: 80,
+          width: 600,
+        },
+      },
+    },
+  },
   // Robots.txt 配置 - 外贸网站SEO优化
   robots: {
     UserAgent: '*',
