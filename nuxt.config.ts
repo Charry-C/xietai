@@ -133,20 +133,21 @@ export default defineNuxtConfig({
   },
   // Robots.txt 配置 - 外贸网站SEO优化
   robots: {
-    UserAgent: '*',
-    Allow: '/',
-    Disallow: ['/api/', '/admin/', '/private/', '/_nuxt/'],
-    Sitemap: `${seoConfig.siteUrl}/sitemap.xml`,
-    // 主要搜索引擎爬虫
-    Googlebot: '/',
-    Bingbot: '/',
-    Yandex: '/', // 俄罗斯市场
-    Baiduspider: '/', // 中国市场
+    groups: [
+      {
+        userAgent: '*',
+        allow: ['/'],
+        disallow: ['/admin/', '/private/'],
+      },
+    ],
+    // i18n 多站点地图下，实际入口是 sitemap_index.xml
+    sitemap: [`${seoConfig.siteUrl}/sitemap_index.xml`],
   },
   // Sitemap 配置
   sitemap: {
     hostname: seoConfig.siteUrl,
     gzip: true,
+    exclude: ['/404', '/cn/404', '/ndefined', '/cn/ndefined'],
     routes: async () => {
       // 动态路由会自动被扫描，这里可以添加额外的路由
       return []
@@ -180,6 +181,9 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    optimizeDeps: {
+      exclude: ['nuxt', 'nuxt/dist/app/composables/manifest.js'],
+    },
     css: {
       preprocessorOptions: {
         less: {
