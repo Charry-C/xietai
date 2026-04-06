@@ -9,10 +9,7 @@
           :alt="t('hero.banner')"
         />
       </div>
-      <div
-        v-else
-        class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1596524430615-b46475ddff6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center opacity-20"
-      ></div>
+      <div v-else class="absolute inset-0 bg-brand-navy opacity-20"></div>
       <div class="container mx-auto px-6 relative z-10">
         <span
           class="inline-block text-brand-gold text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-fade-in-up"
@@ -306,19 +303,21 @@ const router = useRouter()
 // 选中的产品
 const selectedProducts = ref<ProductOption[]>([])
 
-// 产品选项列表
-const productOptions = ref<ProductOption[]>([])
-
-// 在 setup 顶层获取产品列表（useFetch 必须在顶层调用）
-const { data: productsResponse } = await getProducts<any>({
-  query: { populate: '*' },
+// 产品选项列表（懒加载，避免阻塞页面跳转）
+const { data: productsResponse } = getProducts<any>({
+  lazy: true,
+  default: () => ({ data: [], meta: {} }),
+  query: {
+    fields: ['name', 'description', 'documentId'],
+    'populate[image][fields][0]': 'url',
+    'pagination[pageSize]': 100,
+  },
 })
 
-if (productsResponse.value?.data) {
-  const items = Array.isArray(productsResponse.value.data)
-    ? productsResponse.value.data
-    : [productsResponse.value.data]
-  productOptions.value = items.map((item: any) => {
+const productOptions = computed<ProductOption[]>(() => {
+  const raw = productsResponse.value?.data
+  const items = Array.isArray(raw) ? raw : raw ? [raw] : []
+  return items.map((item: any) => {
     const attributes = item.attributes || item
     const rawImages = attributes.image || []
     const imageList = Array.isArray(rawImages) ? rawImages : [rawImages]
@@ -331,7 +330,7 @@ if (productsResponse.value?.data) {
       description: attributes.description || '',
     }
   })
-}
+})
 
 // 从 URL query 参数获取产品信息并添加到选中列表
 onMounted(() => {
@@ -368,7 +367,10 @@ const getFullUrl = (url: string) => {
   return url.startsWith('http') ? url : `${baseUrl}${url}`
 }
 
-const { data: contactResponse } = await getContactData()
+const { data: contactResponse } = getContactData({
+  lazy: true,
+  default: () => ({ data: null, meta: {} }),
+})
 
 const contactData = computed<ContactData | null>(() => {
   return contactResponse.value?.data || null

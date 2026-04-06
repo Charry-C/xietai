@@ -13,10 +13,7 @@
           preload
         />
       </div>
-      <div
-        v-else
-        class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1620799140408-ed5341cd2431?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center opacity-20"
-      ></div>
+      <div v-else class="absolute inset-0 bg-brand-navy opacity-20"></div>
       <div class="container mx-auto px-6 relative z-10 text-center">
         <span
           class="inline-block text-brand-gold text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-fade-in-up"
@@ -350,7 +347,7 @@ const bannerBgUrl = computed(() => {
 
 const loading = ref(true)
 const currentPage = ref(1)
-const pageSize = ref(6)
+const pageSize = ref(8)
 const total = ref(0)
 const categories = ref<any[]>([])
 const activeCategory = ref<number | string | null>(null)

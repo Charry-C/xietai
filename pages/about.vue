@@ -13,10 +13,7 @@
           preload
         />
       </div>
-      <div
-        v-else
-        class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center opacity-30"
-      ></div>
+      <div v-else class="absolute inset-0 bg-brand-navy opacity-30"></div>
       <div class="container mx-auto px-6 relative z-10 text-center">
         <span
           class="block text-brand-gold font-bold tracking-[0.2em] uppercase text-sm mb-6 animate-fade-in-up"
@@ -43,16 +40,6 @@
                 v-if="companyImgUrl"
                 :src="companyImgUrl"
                 alt="Company"
-                class="w-full h-full object-cover"
-                format="webp"
-                quality="85"
-                loading="lazy"
-                preset="product"
-              />
-              <NuxtImg
-                v-else
-                src="https://images.unsplash.com/photo-1534643960519-11ad79bc19df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                :alt="t('about.factoryFloorAlt')"
                 class="w-full h-full object-cover"
                 format="webp"
                 quality="85"
@@ -252,7 +239,9 @@ const getFullUrl = (url: string | null | undefined) => {
 }
 
 // Fetch about page data
-const { data: aboutResponse } = await getAboutData({
+const { data: aboutResponse } = getAboutData({
+  lazy: true,
+  default: () => ({ data: null, meta: {} }),
   transform: (response: any) => response,
 })
 

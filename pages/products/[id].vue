@@ -74,7 +74,8 @@
           <!-- Main Image -->
           <div class="relative aspect-square bg-white overflow-hidden shadow-sm group">
             <NuxtImg
-              :src="activeImage"
+              :key="displayedImage"
+              :src="displayedImage"
               :alt="product.name"
               class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
               format="webp"
@@ -82,6 +83,14 @@
               loading="eager"
               preset="product"
             />
+            <div
+              v-if="isSwitchingMainImage"
+              class="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center"
+            >
+              <span
+                class="w-7 h-7 border-2 border-brand-navy/20 border-t-brand-gold rounded-full animate-spin"
+              ></span>
+            </div>
           </div>
 
           <!-- Thumbnails -->
@@ -91,9 +100,9 @@
               @click="prevImage"
               class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-navy text-white flex items-center justify-center shadow-lg hover:bg-brand-gold transition-colors z-10"
               :class="{
-                'opacity-50 cursor-not-allowed': product.images.indexOf(activeImage) === 0,
+                'opacity-50 cursor-not-allowed': product.images.indexOf(selectedImage) === 0,
               }"
-              :disabled="product.images.indexOf(activeImage) === 0"
+              :disabled="product.images.indexOf(selectedImage) === 0"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -119,15 +128,15 @@
                 <button
                   v-for="(img, idx) in product.images"
                   :key="idx"
-                  @click="activeImage = img"
+                  @click="selectImage(img)"
                   :ref="
                     (el) => {
-                      if (activeImage === img) activeThumbnail = el as HTMLElement
+                      if (selectedImage === img) activeThumbnail = el as HTMLElement
                     }
                   "
                   class="flex-shrink-0 w-24 h-24 border-2 transition-all duration-300 overflow-hidden relative snap-start"
                   :class="
-                    activeImage === img
+                    selectedImage === img
                       ? 'border-brand-gold ring-1 ring-brand-gold'
                       : 'border-transparent hover:border-brand-navy/20'
                   "
@@ -142,7 +151,7 @@
                     preset="thumbnail"
                   />
                   <div
-                    v-if="activeImage === img"
+                    v-if="selectedImage === img"
                     class="absolute left-0 top-0 bottom-0 w-1 bg-brand-gold"
                   ></div>
                 </button>
@@ -155,9 +164,9 @@
               class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-navy text-white flex items-center justify-center shadow-lg hover:bg-brand-gold transition-colors z-10"
               :class="{
                 'opacity-50 cursor-not-allowed':
-                  product.images.indexOf(activeImage) === product.images.length - 1,
+                  product.images.indexOf(selectedImage) === product.images.length - 1,
               }"
-              :disabled="product.images.indexOf(activeImage) === product.images.length - 1"
+              :disabled="product.images.indexOf(selectedImage) === product.images.length - 1"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -202,7 +211,7 @@
             <NuxtLink
               :to="
                 localePath(
-                  `/contact?productId=${product.id}&productName=${encodeURIComponent(product.name)}&productImage=${encodeURIComponent(activeImage || '')}`,
+                  `/contact?productId=${product.id}&productName=${encodeURIComponent(product.name)}&productImage=${encodeURIComponent(displayedImage || '')}`,
                 )
               "
               class="bg-brand-navy text-white px-8 py-4 font-bold tracking-wider hover:bg-brand-gold transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-center inline-block"
@@ -233,9 +242,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getProduct } from '@/api/product'
+import { strapiRequest } from '@/composables/useStrapiFetch'
+import { useLocale } from '@/composables/useLocale'
 import { getStrapiImage } from '@/utils/index'
 
 // SEO 配置 - 产品详情（外贸B2B）
@@ -271,7 +281,8 @@ watch(
 const route = useRoute()
 const router = useRouter()
 const localePath = useLocalePath()
-const loading = ref(true)
+const { strapiLocale } = useLocale()
+const routeProductId = computed(() => String(route.params.id || ''))
 
 // Interface based on the user's image data
 interface Product {
@@ -281,18 +292,141 @@ interface Product {
   specs: Record<string, string>
 }
 
-const product = ref<Product | null>(null)
-const activeImage = ref('')
+const selectedImage = ref('')
+const displayedImage = ref('')
 const activeThumbnail = ref<HTMLElement | null>(null)
 const thumbnailContainer = ref<HTMLElement | null>(null)
+const isSwitchingMainImage = ref(false)
+const REQUEST_TIMEOUT_MS = 10000
 
-// Watch activeImage to scroll thumbnail into view
+const withTimeout = async <T,>(promise: Promise<T>, timeoutMs = REQUEST_TIMEOUT_MS) => {
+  let timeoutHandle: ReturnType<typeof setTimeout> | null = null
+  try {
+    return (await Promise.race([
+      promise,
+      new Promise<T>((resolve) => {
+        timeoutHandle = setTimeout(() => resolve(null as T), timeoutMs)
+      }),
+    ])) as T
+  } finally {
+    if (timeoutHandle) clearTimeout(timeoutHandle)
+  }
+}
+
+const mapProduct = (item: any): Product | null => {
+  if (!item) return null
+  const attributes = item.attributes || item
+
+  // Process images
+  const rawImages = attributes.image || []
+  const imageList = Array.isArray(rawImages) ? rawImages : [rawImages]
+
+  const images = imageList
+    .filter((img: any) => img)
+    .map((img: any) => getStrapiImage([img], 'large'))
+    .filter((url: string) => url)
+
+  const specs: Record<string, string> = attributes.specs || {}
+
+  return {
+    id: item.documentId || String(item.id),
+    name: attributes.name,
+    images,
+    specs,
+  }
+}
+
+const fetchProduct = async (id: string) => {
+  if (!id) return null
+  if (id === 'undefined' || id === 'null') return null
+  try {
+    // Prefer documentId route style, fallback to numeric id for compatibility.
+    const byDocumentId = await withTimeout(
+      strapiRequest<any>(
+        '/products',
+        'get',
+        {
+          'filters[documentId][$eq]': id,
+          populate: '*',
+          'pagination[pageSize]': 1,
+        },
+        undefined,
+        strapiLocale.value,
+      ),
+    )
+    const first = byDocumentId?.data?.data?.[0]
+    if (first) return mapProduct(first)
+
+    if (/^\d+$/.test(id)) {
+      const byId = await withTimeout(
+        strapiRequest<any>(
+          '/products',
+          'get',
+          {
+            'filters[id][$eq]': Number(id),
+            populate: '*',
+            'pagination[pageSize]': 1,
+          },
+          undefined,
+          strapiLocale.value,
+        ),
+      )
+      return mapProduct(byId?.data?.data?.[0])
+    }
+
+    return null
+  } catch (e) {
+    console.error('Error fetching product:', e)
+    return null
+  }
+}
+
+const { data: product, pending: loading } = useAsyncData<Product | null>(
+  () => `product-detail-${routeProductId.value}-${strapiLocale.value}`,
+  () => fetchProduct(routeProductId.value),
+  {
+    server: false,
+    default: () => null,
+    watch: [routeProductId, strapiLocale],
+  },
+)
+
+const preloadImage = (src: string) => {
+  if (!process.client || !src) return Promise.resolve(true)
+  return new Promise<boolean>((resolve) => {
+    const img = new Image()
+    img.onload = () => resolve(true)
+    img.onerror = () => resolve(false)
+    img.src = src
+  })
+}
+
+let imageSwitchToken = 0
+const selectImage = async (img: string) => {
+  if (!img || img === selectedImage.value) return
+  selectedImage.value = img
+  if (img === displayedImage.value) return
+
+  const token = ++imageSwitchToken
+  isSwitchingMainImage.value = true
+  const loaded = await preloadImage(img)
+  if (token !== imageSwitchToken) return
+
+  // Even if preload fails, switch to keep interaction consistent.
+  displayedImage.value = img
+  isSwitchingMainImage.value = false
+  if (!loaded) {
+    // no-op: keep fallback behavior handled by NuxtImg
+  }
+}
+
+// Watch selectedImage to scroll thumbnail into view
 watch(
-  activeImage,
+  selectedImage,
   () => {
     if (activeThumbnail.value && thumbnailContainer.value) {
       activeThumbnail.value.scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'auto',
         block: 'nearest',
         inline: 'center',
       })
@@ -300,43 +434,6 @@ watch(
   },
   { flush: 'post' },
 )
-
-const fetchProduct = async (id: string) => {
-  try {
-    const { data } = await getProduct<any>(id, {
-      query: { populate: '*' },
-      server: false,
-    })
-
-    if (!data.value || !data.value.data) return null
-
-    const item = data.value.data
-    // Handle both v4 (attributes) and v5 (flat) structures
-    const attributes = item.attributes || item
-
-    // Process images
-    const rawImages = attributes.image || []
-    const imageList = Array.isArray(rawImages) ? rawImages : [rawImages]
-
-    const images = imageList
-      .filter((img: any) => img)
-      .map((img: any) => getStrapiImage([img], 'large'))
-      .filter((url: string) => url)
-
-    // Get specs directly from API response
-    const specs: Record<string, string> = attributes.specs || {}
-
-    return {
-      id: item.documentId || String(item.id),
-      name: attributes.name,
-      images: images,
-      specs: specs,
-    }
-  } catch (e) {
-    console.error('Error fetching product:', e)
-    return null
-  }
-}
 
 const formatKey = (key: string) => {
   return key
@@ -350,34 +447,37 @@ const nextProduct = () => {
 
 const prevImage = () => {
   if (!product.value) return
-  const currentIndex = product.value.images.indexOf(activeImage.value)
+  const currentIndex = product.value.images.indexOf(selectedImage.value)
   if (currentIndex > 0) {
-    activeImage.value = product.value.images[currentIndex - 1]
+    selectImage(product.value.images[currentIndex - 1])
   }
 }
 
 const nextImage = () => {
   if (!product.value) return
-  const currentIndex = product.value.images.indexOf(activeImage.value)
+  const currentIndex = product.value.images.indexOf(selectedImage.value)
   if (currentIndex < product.value.images.length - 1) {
-    activeImage.value = product.value.images[currentIndex + 1]
+    selectImage(product.value.images[currentIndex + 1])
   }
 }
 
-onMounted(async () => {
-  loading.value = true
-  try {
-    const data = await fetchProduct(route.params.id as string)
-    product.value = data
-    if (data && data.images.length > 0) {
-      activeImage.value = data.images[0]
-    }
-  } catch (e) {
-    console.error(e)
-  } finally {
-    loading.value = false
-  }
-})
+watch(
+  product,
+  (data) => {
+    selectedImage.value = data?.images?.[0] || ''
+    displayedImage.value = data?.images?.[0] || ''
+    isSwitchingMainImage.value = false
+    productForSeo.value = data
+      ? {
+          name: data.name,
+          description: Object.values(data.specs || {})
+            .filter(Boolean)
+            .join(' · '),
+        }
+      : null
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>

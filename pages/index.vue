@@ -28,17 +28,7 @@
             preload
           />
         </template>
-        <NuxtImg
-          v-else
-          src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
-          class="w-full h-full object-cover opacity-40"
-          alt="Hero Background"
-          format="webp"
-          quality="80"
-          loading="eager"
-          fetchpriority="high"
-          preload
-        />
+        <div v-else class="w-full h-full bg-brand-navy opacity-40"></div>
       </div>
       <div
         class="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-transparent opacity-80"
@@ -276,10 +266,7 @@
     </section>
 
     <!-- Core Advantages Section (Carousel) -->
-    <section
-      ref="coreAdvantagesRef"
-      class="py-24 md:py-32 bg-[#F7F3EB] relative overflow-hidden isolate z-20"
-    >
+    <section ref="coreAdvantagesRef" class="py-24 md:py-32 relative overflow-hidden isolate z-20">
       <div class="container mx-auto px-4 sm:px-6 relative z-10 max-w-7xl">
         <!-- Title Area -->
         <div
@@ -352,7 +339,7 @@
                 <!-- Content Body -->
                 <div class="pt-16 pb-12 px-6 flex-grow flex flex-col items-center text-center">
                   <h3
-                    class="text-xl sm:text-2xl font-bold text-brand-navy mb-3 md:mb-4 group-hover:text-white transition-colors"
+                    class="text-xl sm:text-2xl font-bold text-brand-navy mb-3 md:mb-4 group-hover:text-brand-gold transition-colors"
                   >
                     {{ advantage.title }}
                   </h3>
@@ -717,7 +704,9 @@ const getAreaMediaAsset = (area: any, type: 'video' | 'image'): MediaFile | null
 }
 
 // Fetch home page data
-const { data: homeResponse } = await getHomeData({
+const { data: homeResponse } = getHomeData({
+  lazy: true,
+  default: () => ({ data: null, meta: {} }),
   transform: (response: any) => response,
 })
 

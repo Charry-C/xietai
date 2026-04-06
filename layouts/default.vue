@@ -345,17 +345,21 @@ const scrolled = ref(false)
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
-// Fetch global data with a unique key for layout
-const { data: globalResponse } = await getGlobalData({
+// Non-blocking layout data fetch to avoid route transition stalls.
+const { data: globalResponse } = getGlobalData({
   key: `global-data-${locale.value}`,
+  lazy: true,
+  default: () => ({ data: null, meta: {} }),
 })
 const globalData = computed<GlobalData | null>(() => globalResponse.value?.data || null)
 
 // Fetch categories for footer
-const { data: categoriesResponse } = await strapiFetch.get<{
+const { data: categoriesResponse } = strapiFetch.get<{
   data: { id: number; documentId: string; name: string }[]
 }>('/categories', {
   key: `footer-categories-${locale.value}`,
+  lazy: true,
+  default: () => ({ data: [] }),
   query: {
     sort: 'id:asc',
     'pagination[pageSize]': 20,
@@ -405,8 +409,12 @@ const navLinks = computed(() => [
 ])
 
 onMounted(() => {
-  window.addEventListener('scroll', () => {
+  const onScroll = () => {
     scrolled.value = window.scrollY > 20
+  }
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onUnmounted(() => {
+    window.removeEventListener('scroll', onScroll)
   })
 })
 </script>
