@@ -13,13 +13,16 @@
     >
       <div class="container mx-auto px-6 flex justify-between items-center">
         <!-- Logo -->
-        <NuxtLink :to="localePath('/')" class="flex items-center group">
-          <span
-            class="font-serif text-2xl font-bold tracking-tight text-brand-navy group-hover:text-brand-gold transition-colors duration-300"
-          >
-            {{ globalData?.siteName || t('common.brand') }}
-            <span class="text-brand-gold">.</span>
-          </span>
+        <NuxtLink
+          :to="localePath('/')"
+          class="flex items-center group"
+          :aria-label="t('common.brand')"
+        >
+          <img
+            src="/xietai-logo-wide.png"
+            :alt="globalData?.siteName || t('common.brand')"
+            class="h-6 md:h-8 w-auto transition-transform duration-300"
+          />
         </NuxtLink>
 
         <!-- Desktop Navigation -->
@@ -102,10 +105,14 @@
         <div class="mb-12">
           <NuxtLink
             :to="localePath('/')"
-            class="inline-block font-serif text-4xl font-bold tracking-tight mb-6"
+            class="inline-flex items-center rounded-xl bg-white px-3 py-2 mb-6"
+            :aria-label="t('common.brand')"
           >
-            {{ globalData?.siteName || t('common.brand') }}
-            <span class="text-brand-gold">.</span>
+            <img
+              src="/xietai-logo-wide.png"
+              :alt="globalData?.siteName || t('common.brand')"
+              class="h-12 md:h-14 w-auto"
+            />
           </NuxtLink>
           <p class="text-white/60 text-lg leading-[2] max-w-2xl">
             {{ globalData?.siteIntro || t('footer.companyIntro') }}
