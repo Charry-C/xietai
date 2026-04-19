@@ -100,9 +100,9 @@
               @click="prevImage"
               class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-navy text-white flex items-center justify-center shadow-lg hover:bg-brand-gold transition-colors z-10"
               :class="{
-                'opacity-50 cursor-not-allowed': product.images.indexOf(selectedImage) === 0,
+                'opacity-50 cursor-not-allowed': resolvedImages.indexOf(selectedImage) === 0,
               }"
-              :disabled="product.images.indexOf(selectedImage) === 0"
+              :disabled="resolvedImages.indexOf(selectedImage) === 0"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +126,7 @@
                 class="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide scroll-smooth snap-x"
               >
                 <button
-                  v-for="(img, idx) in product.images"
+                  v-for="(img, idx) in resolvedImages"
                   :key="idx"
                   @click="selectImage(img)"
                   :ref="
@@ -164,9 +164,9 @@
               class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-navy text-white flex items-center justify-center shadow-lg hover:bg-brand-gold transition-colors z-10"
               :class="{
                 'opacity-50 cursor-not-allowed':
-                  product.images.indexOf(selectedImage) === product.images.length - 1,
+                  resolvedImages.indexOf(selectedImage) === resolvedImages.length - 1,
               }"
-              :disabled="product.images.indexOf(selectedImage) === product.images.length - 1"
+              :disabled="resolvedImages.indexOf(selectedImage) === resolvedImages.length - 1"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -194,10 +194,60 @@
 
           <div class="w-20 h-1 bg-brand-gold mb-8"></div>
 
+          <!-- Product Styles -->
+          <div v-if="hasProductStyles" class="mb-8">
+            <p class="text-sm tracking-wide uppercase text-brand-navy/60 mb-3">
+              {{ $t('products.selectStyle') }}
+            </p>
+            <div class="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-hide">
+              <button
+                v-for="style in product.styles"
+                :key="style.id"
+                type="button"
+                @click="selectedStyleId = style.id"
+                class="group shrink-0 flex items-center gap-3 transition-all"
+                :class="
+                  selectedStyleId === style.id ? 'opacity-100' : 'opacity-80 hover:opacity-100'
+                "
+              >
+                <span
+                  class="w-11 h-11 rounded-full overflow-hidden border-2 bg-white transition-all duration-300 inline-flex items-center justify-center"
+                  :class="
+                    selectedStyleId === style.id
+                      ? 'border-brand-gold ring-2 ring-brand-gold/30'
+                      : 'border-brand-navy/15 group-hover:border-brand-gold/60'
+                  "
+                >
+                  <NuxtImg
+                    v-if="style.coverImage"
+                    :src="style.coverImage"
+                    :alt="style.name"
+                    class="w-full h-full object-cover"
+                    format="webp"
+                    quality="75"
+                    loading="lazy"
+                    preset="thumbnail"
+                  />
+                  <span v-else class="w-2 h-2 rounded-full bg-brand-navy/30"></span>
+                </span>
+                <span
+                  class="text-sm whitespace-nowrap transition-colors"
+                  :class="
+                    selectedStyleId === style.id
+                      ? 'text-brand-navy font-medium'
+                      : 'text-brand-navy/65'
+                  "
+                >
+                  {{ style.name }}
+                </span>
+              </button>
+            </div>
+          </div>
+
           <!-- Product Specifications -->
           <div class="space-y-3 text-brand-navy/80 mb-10 font-light">
             <div
-              v-for="(value, key) in product.specs"
+              v-for="(value, key) in resolvedSpecs"
               :key="key"
               class="grid grid-cols-[140px_1fr] gap-4 py-1 border-b border-brand-navy/5 last:border-0"
             >
@@ -209,11 +259,7 @@
           <!-- Actions -->
           <div class="flex flex-col sm:flex-row gap-4 mt-8">
             <NuxtLink
-              :to="
-                localePath(
-                  `/contact?productId=${product.id}&productName=${encodeURIComponent(product.name)}&productImage=${encodeURIComponent(displayedImage || '')}`,
-                )
-              "
+              :to="localePath({ path: '/contact', query: contactQuery })"
               class="bg-brand-navy text-white px-8 py-4 font-bold tracking-wider hover:bg-brand-gold transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-center inline-block"
             >
               {{ $t('products.inquireNow') }}
@@ -289,11 +335,22 @@ interface Product {
   id: string
   name: string
   images: string[]
-  specs: Record<string, string>
+  specs: Record<string, string | number | boolean>
+  styles: ProductStyle[]
+}
+
+interface ProductStyle {
+  id: string
+  name: string
+  coverImage: string
+  detailImages: string[]
+  specs: Record<string, string | number | boolean>
+  sort: number
 }
 
 const selectedImage = ref('')
 const displayedImage = ref('')
+const selectedStyleId = ref('')
 const activeThumbnail = ref<HTMLElement | null>(null)
 const thumbnailContainer = ref<HTMLElement | null>(null)
 const isSwitchingMainImage = ref(false)
@@ -313,26 +370,67 @@ const withTimeout = async <T,>(promise: Promise<T>, timeoutMs = REQUEST_TIMEOUT_
   }
 }
 
+const normalizeMediaCollection = (raw: any) => {
+  if (!raw) return []
+  const normalized = raw?.data ?? raw
+  if (Array.isArray(normalized)) return normalized.filter(Boolean)
+  return normalized ? [normalized] : []
+}
+
+const unwrapEntity = (entity: any) => {
+  if (!entity) return null
+  if (!entity.attributes) return entity
+
+  return {
+    ...entity.attributes,
+    id: entity.id ?? entity.attributes.id,
+    documentId: entity.documentId || entity.attributes.documentId,
+  }
+}
+
+const mapImageList = (raw: any, size: 'thumbnail' | 'small' | 'medium' | 'large' = 'large') => {
+  return normalizeMediaCollection(raw)
+    .map((img: any) => {
+      const media = unwrapEntity(img)
+      return getStrapiImage(media, size)
+    })
+    .filter((url: string) => url)
+}
+
 const mapProduct = (item: any): Product | null => {
   if (!item) return null
   const attributes = item.attributes || item
 
   // Process images
-  const rawImages = attributes.image || []
-  const imageList = Array.isArray(rawImages) ? rawImages : [rawImages]
+  const images = mapImageList(attributes.image)
 
-  const images = imageList
-    .filter((img: any) => img)
-    .map((img: any) => getStrapiImage([img], 'large'))
-    .filter((url: string) => url)
+  const rawStyles = attributes.product_styles?.data || attributes.product_styles || []
+  const styleList = Array.isArray(rawStyles) ? rawStyles : [rawStyles]
 
-  const specs: Record<string, string> = attributes.specs || {}
+  const styles = styleList
+    .filter((style: any) => style)
+    .map((style: any) => {
+      const styleAttrs = unwrapEntity(style) || {}
+      const styleDetailImages = styleAttrs.detailImages || styleAttrs.detailImages
+      return {
+        id: styleAttrs.documentId || String(styleAttrs.id),
+        name: styleAttrs.name || '',
+        coverImage: mapImageList(styleAttrs.coverImage, 'thumbnail')[0] || '',
+        detailImages: mapImageList(styleDetailImages),
+        specs: styleAttrs.specs || {},
+        sort: Number(styleAttrs.sort || 0),
+      } satisfies ProductStyle
+    })
+    .sort((a: ProductStyle, b: ProductStyle) => b.sort - a.sort)
+
+  const specs: Record<string, string | number | boolean> = attributes.specs || {}
 
   return {
     id: item.documentId || String(item.id),
     name: attributes.name,
     images,
     specs,
+    styles,
   }
 }
 
@@ -347,7 +445,17 @@ const fetchProduct = async (id: string) => {
         'get',
         {
           'filters[documentId][$eq]': id,
-          populate: '*',
+          'fields[0]': 'name',
+          'fields[1]': 'specs',
+          'populate[image][fields][0]': 'url',
+          'populate[image][fields][1]': 'formats',
+          'populate[product_styles][fields][0]': 'name',
+          'populate[product_styles][fields][1]': 'sort',
+          'populate[product_styles][fields][2]': 'specs',
+          'populate[product_styles][populate][coverImage][fields][0]': 'url',
+          'populate[product_styles][populate][coverImage][fields][1]': 'formats',
+          'populate[product_styles][populate][detailImages][fields][0]': 'url',
+          'populate[product_styles][populate][detailImages][fields][1]': 'formats',
           'pagination[pageSize]': 1,
         },
         undefined,
@@ -364,7 +472,17 @@ const fetchProduct = async (id: string) => {
           'get',
           {
             'filters[id][$eq]': Number(id),
-            populate: '*',
+            'fields[0]': 'name',
+            'fields[1]': 'specs',
+            'populate[image][fields][0]': 'url',
+            'populate[image][fields][1]': 'formats',
+            'populate[product_styles][fields][0]': 'name',
+            'populate[product_styles][fields][1]': 'sort',
+            'populate[product_styles][fields][2]': 'specs',
+            'populate[product_styles][populate][coverImage][fields][0]': 'url',
+            'populate[product_styles][populate][coverImage][fields][1]': 'formats',
+            'populate[product_styles][populate][detailImages][fields][0]': 'url',
+            'populate[product_styles][populate][detailImages][fields][1]': 'formats',
             'pagination[pageSize]': 1,
           },
           undefined,
@@ -390,6 +508,48 @@ const { data: product, pending: loading } = useAsyncData<Product | null>(
     watch: [routeProductId, strapiLocale],
   },
 )
+
+const hasProductStyles = computed(() => (product.value?.styles?.length || 0) > 0)
+
+const activeStyle = computed(() => {
+  if (!hasProductStyles.value || !product.value) return null
+  return (
+    product.value.styles.find((style) => style.id === selectedStyleId.value) ||
+    product.value.styles[0] ||
+    null
+  )
+})
+
+const resolvedImages = computed(() => {
+  if (!product.value) return []
+  if (!hasProductStyles.value) return product.value.images
+  return activeStyle.value?.detailImages?.length
+    ? activeStyle.value.detailImages
+    : product.value.images
+})
+
+const resolvedSpecs = computed(() => {
+  if (!product.value) return {}
+  if (!hasProductStyles.value) return product.value.specs
+  return Object.keys(activeStyle.value?.specs || {}).length
+    ? activeStyle.value?.specs || {}
+    : product.value.specs
+})
+
+const contactQuery = computed<Record<string, string>>(() => {
+  const query: Record<string, string> = {
+    productId: product.value?.id || '',
+    productName: product.value?.name || '',
+    productImage: displayedImage.value || '',
+  }
+
+  if (hasProductStyles.value && activeStyle.value) {
+    query.styleId = activeStyle.value.id
+    query.styleName = activeStyle.value.name
+  }
+
+  return query
+})
 
 const preloadImage = (src: string) => {
   if (!process.client || !src) return Promise.resolve(true)
@@ -446,26 +606,23 @@ const nextProduct = () => {
 }
 
 const prevImage = () => {
-  if (!product.value) return
-  const currentIndex = product.value.images.indexOf(selectedImage.value)
+  const currentIndex = resolvedImages.value.indexOf(selectedImage.value)
   if (currentIndex > 0) {
-    selectImage(product.value.images[currentIndex - 1])
+    selectImage(resolvedImages.value[currentIndex - 1])
   }
 }
 
 const nextImage = () => {
-  if (!product.value) return
-  const currentIndex = product.value.images.indexOf(selectedImage.value)
-  if (currentIndex < product.value.images.length - 1) {
-    selectImage(product.value.images[currentIndex + 1])
+  const currentIndex = resolvedImages.value.indexOf(selectedImage.value)
+  if (currentIndex < resolvedImages.value.length - 1) {
+    selectImage(resolvedImages.value[currentIndex + 1])
   }
 }
 
 watch(
   product,
   (data) => {
-    selectedImage.value = data?.images?.[0] || ''
-    displayedImage.value = data?.images?.[0] || ''
+    selectedStyleId.value = data?.styles?.[0]?.id || ''
     isSwitchingMainImage.value = false
     productForSeo.value = data
       ? {
@@ -475,6 +632,16 @@ watch(
             .join(' · '),
         }
       : null
+  },
+  { immediate: true },
+)
+
+watch(
+  resolvedImages,
+  (images) => {
+    selectedImage.value = images[0] || ''
+    displayedImage.value = images[0] || ''
+    isSwitchingMainImage.value = false
   },
   { immediate: true },
 )
