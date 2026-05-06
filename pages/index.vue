@@ -157,109 +157,162 @@
       </div>
     </section>
 
-    <!-- Services Section -->
-    <section class="py-16 md:py-24 bg-white relative overflow-hidden isolate z-20">
+    <!-- Production Process Section -->
+    <section
+      v-if="productionProcess"
+      class="py-16 md:py-24 bg-white relative overflow-hidden isolate z-20"
+    >
       <div
-        class="pointer-events-none absolute top-0 right-0 w-1/3 h-full bg-brand-cream/50 -skew-x-12 transform origin-top-right z-0"
+        class="pointer-events-none absolute top-0 right-0 h-full w-1/3 origin-top-right -skew-x-12 bg-brand-cream/60 transform z-0"
       ></div>
-      <div v-if="servicesBackgroundUrl" class="pointer-events-none absolute inset-0 opacity-5 z-0">
-        <video
-          v-if="isVideo(servicesBackgroundUrl)"
-          :src="servicesBackgroundUrl"
-          autoplay
-          muted
-          loop
-          playsinline
-          class="w-full h-full object-cover"
-        ></video>
-        <NuxtImg
-          v-else
-          :src="servicesBackgroundUrl"
-          class="w-full h-full object-cover"
-          alt=""
-          format="webp"
-          quality="60"
-          loading="lazy"
-        />
-      </div>
 
-      <div class="container mx-auto px-4 sm:px-6 relative z-20">
-        <div class="text-center mb-6">
-          <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-brand-navy">
-            {{ homeData?.servicesArea?.title || t('home.comprehensiveServices') }}
-          </h2>
-          <span class="text-brand-gold font-bold tracking-widest uppercase text-sm mt-5 block">
-            {{ homeData?.servicesArea?.subTitle || t('home.ourExpertise') }}
-          </span>
+      <div class="container mx-auto px-6 relative z-20">
+        <div class="mb-10 flex flex-col gap-5 md:mb-14 md:flex-row md:items-end md:justify-between">
+          <div class="max-w-3xl">
+            <span class="mb-4 block text-sm font-bold uppercase tracking-[0.24em] text-brand-gold">
+              {{ productionProcess.tip }}
+            </span>
+            <h2
+              class="text-[2.45rem] font-bold leading-none text-brand-navy sm:text-4xl md:text-5xl"
+            >
+              {{ productionProcess.title }}
+            </h2>
+          </div>
+          <p class="max-w-xl text-lg leading-relaxed text-gray-500 md:text-base md:text-gray-600">
+            {{ productionProcess.subTitle }}
+          </p>
         </div>
 
-        <div class="mb-10 md:mb-14 grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8 items-stretch">
+        <div class="lg:hidden">
           <div
-            class="lg:col-span-3 relative overflow-hidden bg-brand-navy min-h-[240px] sm:min-h-[280px] md:min-h-[360px] shadow-2xl"
+            class="relative aspect-video overflow-hidden rounded-[1.75rem] bg-brand-navy shadow-[0_22px_60px_rgba(15,23,42,0.18)]"
           >
             <ServiceVideoPlayer
-              v-if="serviceVideoUrl"
-              :src="serviceVideoUrl"
-              :poster="serviceVideoPoster"
-              :title="homeData?.servicesArea?.title || t('home.servicesReel')"
+              v-if="activeProcessStep"
+              :src="activeProcessStep.videoUrl"
+              :poster="activeProcessStep.posterUrl"
+              :title="activeProcessStep.title"
+              :eyebrow="activeProcessStep.subTitle"
+              :show-caption="false"
+              control-variant="light"
             />
-            <NuxtImg
-              v-else-if="serviceVideoPoster"
-              :src="serviceVideoPoster"
-              class="w-full h-full object-cover"
-              :alt="t('nav.services')"
-              format="webp"
-              quality="80"
-              loading="lazy"
-            />
-            <div v-else class="w-full h-full bg-brand-navy"></div>
+            <div v-else class="h-full w-full bg-brand-navy"></div>
           </div>
-          <div
-            class="lg:col-span-2 bg-white/90 backdrop-blur-sm border border-brand-gold/20 p-6 sm:p-8 md:p-10 flex flex-col justify-center"
-          >
-            <p class="text-sm uppercase tracking-[0.24em] text-brand-gold font-semibold mb-4">
-              {{ titleCard?.subTitle || t('home.serviceVision') }}
+
+          <div class="relative mx-auto mt-9 w-full max-w-[23rem] px-2">
+            <div
+              v-if="processSteps.length > 1"
+              class="absolute left-8 right-8 top-1/2 h-px -translate-y-1/2 bg-brand-gold/20"
+            ></div>
+            <div
+              v-if="processSteps.length > 1"
+              class="absolute left-8 right-8 top-1/2 h-px origin-left bg-brand-gold transition-transform duration-500"
+              :style="{
+                transform: `translateY(-50%) scaleX(${mobileProcessProgressScale})`,
+              }"
+            ></div>
+            <div class="relative flex items-center justify-center gap-3 sm:gap-5">
+              <button
+                v-for="(step, index) in processSteps"
+                :key="step.id"
+                type="button"
+                class="flex h-12 w-12 flex-none items-center justify-center rounded-full border text-base font-bold transition-all duration-300"
+                :class="
+                  activeProcessIndex === index
+                    ? 'border-brand-gold bg-brand-gold text-white shadow-[0_10px_28px_rgba(197,160,89,0.35)]'
+                    : 'border-brand-gold/20 bg-white/95 text-gray-400'
+                "
+                :aria-label="step.subTitle"
+                @click="selectProcessStep(index)"
+              >
+                {{ String(index + 1).padStart(2, '0') }}
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-9 border-b border-brand-gold/20 px-4 pb-8">
+            <p class="mb-5 text-sm font-bold uppercase tracking-[0.28em] text-brand-gold">
+              {{ activeProcessStep?.subTitle }}
             </p>
-            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-brand-navy mb-4 md:mb-5">
-              {{
-                titleCard?.title || homeData?.servicesArea?.title || t('home.comprehensiveServices')
-              }}
+            <h3 class="text-3xl font-bold leading-tight text-brand-navy">
+              {{ activeProcessStep?.title }}
             </h3>
-            <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
-              {{ titleCard?.description || t('home.servicesDescription') }}
+            <p class="mt-5 text-xl leading-relaxed text-gray-500">
+              {{ activeProcessStep?.description }}
             </p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div
+          class="hidden grid-cols-1 items-start gap-8 lg:grid lg:grid-cols-12 lg:gap-10 xl:gap-12"
+        >
+          <div class="relative aspect-video overflow-hidden bg-brand-navy shadow-2xl lg:col-span-7">
+            <ServiceVideoPlayer
+              v-if="activeProcessStep"
+              :src="activeProcessStep.videoUrl"
+              :poster="activeProcessStep.posterUrl"
+              :title="activeProcessStep.title"
+              :eyebrow="activeProcessStep.subTitle"
+            />
+            <div v-else class="h-full w-full bg-brand-navy"></div>
+          </div>
+
           <div
-            v-for="(service, index) in servicesList"
-            :key="index"
-            class="group p-6 sm:p-8 md:p-10 bg-brand-cream hover:bg-brand-navy transition-colors duration-500"
+            class="process-step-list relative max-h-[clamp(360px,32vw,500px)] overflow-y-auto pr-3 lg:col-span-5"
           >
             <div
-              class="w-12 h-12 md:w-14 md:h-14 bg-brand-gold/10 text-brand-gold flex items-center justify-center rounded-full mb-6 md:mb-8 group-hover:bg-white/10 group-hover:text-white transition-colors overflow-hidden"
-            >
-              <NuxtImg
-                v-if="service.iconUrl"
-                :src="service.iconUrl"
-                class="w-full h-full object-contain"
-                alt=""
-                format="webp"
-                quality="80"
-                loading="lazy"
-              />
+              class="pointer-events-none absolute bottom-3 left-[13px] top-3 hidden w-px bg-brand-gold/20 sm:block"
+            ></div>
+            <div class="space-y-3">
+              <button
+                v-for="(step, index) in processSteps"
+                :key="step.id"
+                type="button"
+                class="group relative w-full text-left transition-all duration-300 sm:pl-11"
+                :class="activeProcessIndex === index ? 'py-1' : 'py-1 hover:translate-x-1'"
+                @click="selectProcessStep(index)"
+              >
+                <span
+                  class="absolute left-0 top-4 hidden h-7 w-7 items-center justify-center rounded-full border text-xs font-bold transition-colors sm:flex"
+                  :class="
+                    activeProcessIndex === index
+                      ? 'border-brand-gold bg-brand-gold text-white'
+                      : 'border-brand-gold/40 bg-white text-brand-gold group-hover:border-brand-gold'
+                  "
+                >
+                  {{ String(index + 1).padStart(2, '0') }}
+                </span>
+                <span
+                  class="block border-l-2 px-5 py-4 transition-colors"
+                  :class="
+                    activeProcessIndex === index
+                      ? 'border-brand-gold bg-brand-cream/80 text-brand-navy'
+                      : 'border-brand-gold/15 text-brand-navy hover:border-brand-gold/60'
+                  "
+                >
+                  <span
+                    class="mb-2 block text-[0.7rem] font-semibold uppercase leading-relaxed tracking-[0.22em] text-brand-gold"
+                  >
+                    {{ step.subTitle }}
+                  </span>
+                  <span class="block text-lg font-bold leading-tight sm:text-xl">
+                    {{ step.title }}
+                  </span>
+                  <span
+                    class="grid text-sm leading-relaxed text-gray-600 transition-all duration-300"
+                    :class="
+                      activeProcessIndex === index
+                        ? 'mt-3 grid-rows-[1fr] opacity-100'
+                        : 'mt-0 grid-rows-[0fr] opacity-0'
+                    "
+                  >
+                    <span class="overflow-hidden">
+                      {{ step.description }}
+                    </span>
+                  </span>
+                </span>
+              </button>
             </div>
-            <h3
-              class="text-xl sm:text-2xl font-bold text-brand-navy mb-3 md:mb-4 group-hover:text-white transition-colors"
-            >
-              {{ service.title }}
-            </h3>
-            <p
-              class="text-gray-600 leading-relaxed group-hover:text-white/70 transition-colors text-sm sm:text-base"
-            >
-              {{ service.description }}
-            </p>
           </div>
         </div>
       </div>
@@ -527,8 +580,8 @@
 </template>
 
 <script setup lang="ts">
-import { getHomeData, type HomeData, type MediaFile } from '@/api/home'
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { getHomeData, type HomeData, type MediaFile, type ProductionProcessVideo } from '@/api/home'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 
 // SEO 配置 - 外贸B2B首页
 useSeo({
@@ -693,16 +746,6 @@ const getAreaBackgroundUrl = (area: any): string | null => {
   return first?.url ? getFullUrl(first.url) : null
 }
 
-// Returns first MediaFile of given type from area
-const getAreaMediaAsset = (area: any, type: 'video' | 'image'): MediaFile | null => {
-  const match = type === 'video' ? isVideo : (url: string) => !isVideo(url)
-  if (type === 'image' && area?.background?.url && match(area.background.url))
-    return area.background
-  return (
-    normalizeMediaList(area?.companyImgs).find((m: MediaFile) => !!m?.url && match(m.url)) || null
-  )
-}
-
 // Fetch home page data
 const { data: homeResponse } = getHomeData({
   lazy: true,
@@ -734,39 +777,62 @@ const aboutLeadText = computed(() => aboutArea.value?.subTitle || t('home.aboutL
 
 const aboutBackgroundUrl = computed(() => getAreaBackgroundUrl(aboutArea.value))
 
-const servicesArea = computed(() => homeData.value?.servicesArea)
+interface ProcessStepView {
+  id: number
+  sort: number
+  title: string
+  subTitle: string
+  description: string
+  videoUrl: string | null
+  posterUrl: string | null
+}
 
-const servicesBackgroundUrl = computed(() => getAreaBackgroundUrl(servicesArea.value))
+const productionProcess = computed(() => homeData.value?.productionProcess)
 
-const serviceVideoAsset = computed<MediaFile | null>(() =>
-  getAreaMediaAsset(servicesArea.value, 'video'),
-)
-const serviceImageAsset = computed<MediaFile | null>(() =>
-  getAreaMediaAsset(servicesArea.value, 'image'),
-)
+const normalizeProcessStep = (step: ProductionProcessVideo, index: number): ProcessStepView => ({
+  id: step.id,
+  sort: step.sort ?? index + 1,
+  title: step.title || '',
+  subTitle: step.subTitle || '',
+  description: step.description || '',
+  videoUrl: step.videoUrl?.url ? getFullUrl(step.videoUrl.url) : null,
+  posterUrl: step.posterUrl?.url ? getFullUrl(step.posterUrl.url) : null,
+})
 
-const serviceVideoUrl = computed(() =>
-  serviceVideoAsset.value?.url ? getFullUrl(serviceVideoAsset.value.url) : null,
-)
-
-const serviceVideoPoster = computed(() =>
-  serviceImageAsset.value?.url ? getFullUrl(serviceImageAsset.value.url) : null,
-)
-
-const servicesList = computed(() => {
-  const cards = servicesArea.value?.card
-  if (cards?.length) {
-    return cards.map((card) => ({
-      iconUrl: card.icon?.url ? getFullUrl(card.icon.url) : null,
-      icon: '',
-      title: card.title || '',
-      description: card.subTitle || '',
-    }))
+const processSteps = computed<ProcessStepView[]>(() => {
+  const steps = productionProcess.value?.processVideo
+  if (steps?.length) {
+    return [...steps]
+      .sort((a, b) => (a.sort ?? Number.MAX_SAFE_INTEGER) - (b.sort ?? Number.MAX_SAFE_INTEGER))
+      .map((step, index) => normalizeProcessStep(step, index))
   }
   return []
 })
 
-const titleCard = computed(() => servicesArea.value?.titleCard)
+const activeProcessIndex = ref(0)
+
+const activeProcessStep = computed(
+  () => processSteps.value[activeProcessIndex.value] || processSteps.value[0] || null,
+)
+
+const mobileProcessProgressScale = computed(() => {
+  const total = processSteps.value.length
+  if (total <= 1) return 0
+  return activeProcessIndex.value / (total - 1)
+})
+
+const selectProcessStep = (index: number) => {
+  activeProcessIndex.value = index
+}
+
+watch(
+  () => processSteps.value.length,
+  (length) => {
+    if (activeProcessIndex.value >= length) {
+      activeProcessIndex.value = Math.max(0, length - 1)
+    }
+  },
+)
 
 // Core Advantages Data
 const coreAdvantagesList = computed(() => {
@@ -824,5 +890,23 @@ const productsList = computed(() => {
 
 .animate-fade-in-up {
   animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.process-step-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(197, 160, 89, 0.4) rgba(197, 160, 89, 0.1);
+}
+
+.process-step-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.process-step-list::-webkit-scrollbar-track {
+  background: rgba(197, 160, 89, 0.08);
+}
+
+.process-step-list::-webkit-scrollbar-thumb {
+  background: rgba(197, 160, 89, 0.42);
+  border-radius: 999px;
 }
 </style>

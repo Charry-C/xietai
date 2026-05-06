@@ -48,6 +48,24 @@ export interface ServicesArea extends HomeSectionArea {
   titleCard?: TitleCard
 }
 
+export interface ProductionProcessVideo {
+  id: number
+  sort?: number | null
+  title?: string | null
+  subTitle?: string | null
+  description?: string | null
+  videoUrl?: MediaFile | null
+  posterUrl?: MediaFile | null
+}
+
+export interface ProductionProcess {
+  id: number
+  tip?: string | null
+  title?: string | null
+  subTitle?: string | null
+  processVideo?: ProductionProcessVideo[] | null
+}
+
 export interface ProductArea extends HomeSectionArea {
   card?: ServiceCard[]
   titleCard?: TitleCard
@@ -77,6 +95,7 @@ export interface HomeData {
   bannerArea?: HomeSectionArea | null
   aboutArea?: AboutArea | null
   servicesArea?: ServicesArea | null
+  productionProcess?: ProductionProcess | null
   advantageArea?: AdvantageCard[] | null
   productArea?: ProductArea | null
   createdAt: string
@@ -96,11 +115,20 @@ export const getHomeData = (options?: StrapiFetchOptions<HomeApiResponse>) => {
     'populate[aboutArea][populate][background]': true,
     'populate[aboutArea][populate][companyImgs]': true,
     'populate[aboutArea][populate][numArea]': true,
-    'populate[servicesArea][populate][background]': true,
-    'populate[servicesArea][populate][companyImgs]': true,
-    'populate[servicesArea][populate][card][populate][icon]': true,
-    'populate[servicesArea][populate][card][populate][bannerImg]': true,
-    'populate[servicesArea][populate][titleCard]': true,
+    'populate[productionProcess][fields][0]': 'tip',
+    'populate[productionProcess][fields][1]': 'title',
+    'populate[productionProcess][fields][2]': 'subTitle',
+    'populate[productionProcess][populate][processVideo][fields][0]': 'title',
+    'populate[productionProcess][populate][processVideo][fields][1]': 'subTitle',
+    'populate[productionProcess][populate][processVideo][fields][2]': 'description',
+    'populate[productionProcess][populate][processVideo][fields][3]': 'sort',
+    'populate[productionProcess][populate][processVideo][populate][videoUrl][fields][0]': 'url',
+    'populate[productionProcess][populate][processVideo][populate][videoUrl][fields][1]': 'formats',
+    'populate[productionProcess][populate][processVideo][populate][videoUrl][fields][2]': 'mime',
+    'populate[productionProcess][populate][processVideo][populate][posterUrl][fields][0]': 'url',
+    'populate[productionProcess][populate][processVideo][populate][posterUrl][fields][1]':
+      'formats',
+    'populate[productionProcess][populate][processVideo][populate][posterUrl][fields][2]': 'mime',
     'populate[advantageArea][populate][icon]': true,
     'populate[advantageArea][populate][bannerImg]': true,
     'populate[productArea][populate][background]': true,
